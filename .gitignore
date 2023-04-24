@@ -1,0 +1,7 @@
+# Directories:
+engine/bin/
+app/bin/
+
+# Files:
+lint.sh
+*.o
