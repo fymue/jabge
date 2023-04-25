@@ -10,6 +10,7 @@
 */
 
 #include "src/core.h"
+#include "src/log.h"
 #include "src/application.h"
 #include "src/entrypoint.h"
 

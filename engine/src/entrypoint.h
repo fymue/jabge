@@ -1,7 +1,8 @@
-#ifndef SRC_ENTRYPOINT_H_
-#define SRC_ENTRYPOINT_H_
+#ifndef ENGINE_SRC_ENTRYPOINT_H_
+#define ENGINE_SRC_ENTRYPOINT_H_
 
 #include "application.h"
+#include "log.h"
 
 /*
  * Entrypoint of a program that uses the engine:
@@ -13,8 +14,13 @@
 extern engine::Application* engine::init();
 
 int main(int argc, char **argv) {
+  // FIXME add proper engine init function and move this there
+  engine::Log::init();
+  ENGINE_LOG_ERROR("test log error");
+
   engine::Application *app = engine::init();
   app->run();
   delete app;
 }
-#endif  // SRC_ENTRYPOINT_H_
+
+#endif  // ENGINE_SRC_ENTRYPOINT_H_

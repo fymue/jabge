@@ -1,5 +1,5 @@
-#ifndef SRC_CORE_H_
-#define SRC_CORE_H_
+#ifndef ENGINE_SRC_CORE_H_
+#define ENGINE_SRC_CORE_H_
 
 // definitions of dynamic linking export/import
 // declarations for different operating systems
@@ -26,4 +26,4 @@
   #define PUB_API IMPORT
 #endif
 
-#endif  // SRC_CORE_H_
+#endif  // ENGINE_SRC_CORE_H_

@@ -1,5 +1,5 @@
-#ifndef SRC_APPLICATION_H_
-#define SRC_APPLICATION_H_
+#ifndef ENGINE_SRC_APPLICATION_H_
+#define ENGINE_SRC_APPLICATION_H_
 
 #include "core.h"
 
@@ -19,4 +19,4 @@ Application* init();
 
 }  // namespace engine
 
-#endif  // SRC_APPLICATION_H_
+#endif  // ENGINE_SRC_APPLICATION_H_
