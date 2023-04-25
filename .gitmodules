@@ -1,0 +1,3 @@
+[submodule "engine/external/cpplog"]
+	path = engine/external/cpplog
+	url = git@github.com:fymue/cpplog.git

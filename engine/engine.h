@@ -2,7 +2,7 @@
 #define ENGINE_H_
 
 /*
- * "Public API" of the engine, which exposes every core part
+ * Public API of the engine, which exposes every core part
  * of the engine and includes the entry point of the engine/
  * the program that uses the engine;
  * this file should be included in any program that wants
