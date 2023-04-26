@@ -16,9 +16,10 @@ extern engine::Application* engine::init();
 int main(int argc, char **argv) {
   // FIXME add proper engine init function and move this there
   engine::Log::init();
-  ENGINE_LOG_ERROR("test log error");
 
   engine::Application *app = engine::init();
+  ENGINE_LOG_ERROR(1);
+  ENGINE_LOG_ERROR(3.14);
   app->run();
   delete app;
 }
