@@ -19,7 +19,9 @@ int main(int argc, char **argv) {
 
   engine::Application *app = engine::init();
   ENGINE_LOG_ERROR(1);
-  ENGINE_LOG_ERROR(3.14);
+  ENGINE_LOG_WARN(3.14);
+  ENGINE_LOG_INFO(3000);
+  ENGINE_LOG_INFO(1000, cpplog::LogFmt::TYPE_SIZE | cpplog::NEWLINE);
   app->run();
   delete app;
 }

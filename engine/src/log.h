@@ -4,6 +4,12 @@
 #include <memory>
 #include "../../../cpplog/log.h"  // FIXME add include path in Makefile
 
+#ifdef NDEBUG
+  #define __LOG_LEVEL cpplog::Level::DEBUG
+#else
+  #define __LOG_LEVEL cpplog::Level::STANDARD
+#endif
+
 namespace engine {
 
 /*
@@ -18,11 +24,11 @@ class PUB_API Log {
   static void init() {
     Log::engine_log =
       std::shared_ptr<cpplog::Logger>(cpplog::create_log("ENGINE"));
-    Log::engine_log->set_log_level(cpplog::Level::STANDARD);
+    Log::engine_log->set_log_level(__LOG_LEVEL);
 
     Log::app_log =
       std::shared_ptr<cpplog::Logger>(cpplog::create_log("APP"));
-    Log::app_log->set_log_level(cpplog::Level::STANDARD);
+    Log::app_log->set_log_level(__LOG_LEVEL);
   }
 
   inline static std::shared_ptr<cpplog::Logger> &get_engine_log() {
