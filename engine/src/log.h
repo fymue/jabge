@@ -2,9 +2,12 @@
 #define ENGINE_SRC_LOG_H_
 
 #include <memory>
-#include "../../../cpplog/log.h"  // FIXME add include path in Makefile
+#include <vector>
+#include "core.h"
+// #include "cpplog/log.h"
+#include "../../../cpplog/log.h"
 
-#ifdef NDEBUG
+#ifndef NDEBUG
   #define __LOG_LEVEL cpplog::Level::DEBUG
 #else
   #define __LOG_LEVEL cpplog::Level::STANDARD
@@ -13,35 +16,43 @@
 namespace engine {
 
 /*
+ * extends cpplog::LoggerImpl with engine-specific types
+ * so these types can be logged properly as well
+ */
+class EngineLogImpl: public cpplog::LoggerImpl {
+ public:
+  using cpplog::LoggerImpl::log;
+};
+
+/*
  * wrapper aroung cpplog::Logger class for logging
  */
 class PUB_API Log {
  private:
-  static std::shared_ptr<cpplog::Logger> engine_log;
-  static std::shared_ptr<cpplog::Logger> app_log;
+  typedef std::shared_ptr<cpplog::Logger<EngineLogImpl>> shared_log;
+  static shared_log engine_log;
+  static shared_log app_log;
 
  public:
   static void init() {
-    Log::engine_log =
-      std::shared_ptr<cpplog::Logger>(cpplog::create_log("ENGINE"));
-    Log::engine_log->set_log_level(__LOG_LEVEL);
+    engine_log = shared_log(cpplog::create_log("ENGINE", new EngineLogImpl()));
+    engine_log->set_log_level(__LOG_LEVEL);
 
-    Log::app_log =
-      std::shared_ptr<cpplog::Logger>(cpplog::create_log("APP"));
-    Log::app_log->set_log_level(__LOG_LEVEL);
+    app_log = shared_log(cpplog::create_log("APP", new EngineLogImpl()));
+    app_log->set_log_level(__LOG_LEVEL);
   }
 
-  inline static std::shared_ptr<cpplog::Logger> &get_engine_log() {
+  inline static shared_log &get_engine_log() {
     return engine_log;
   }
 
-  inline static std::shared_ptr<cpplog::Logger> &get_app_log() {
+  inline static shared_log &get_app_log() {
     return app_log;
   }
 };
 
-std::shared_ptr<cpplog::Logger> Log::engine_log;
-std::shared_ptr<cpplog::Logger> Log::app_log;
+std::shared_ptr<cpplog::Logger<EngineLogImpl>> Log::engine_log;
+std::shared_ptr<cpplog::Logger<EngineLogImpl>> Log::app_log;
 
 }  // namespace engine
 
