@@ -1,11 +1,8 @@
 #ifndef ENGINE_SRC_LOG_H_
 #define ENGINE_SRC_LOG_H_
 
-#include <memory>
-#include <vector>
 #include "core.h"
-// #include "cpplog/log.h"
-#include "../../../cpplog/log.h"
+#include "cpplog/log.h"
 
 #ifndef NDEBUG
   #define __LOG_LEVEL cpplog::Level::DEBUG
