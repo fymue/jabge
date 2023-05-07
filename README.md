@@ -20,15 +20,12 @@ To install the dependencies for your type of Linux OS, you can execute the follo
 
 #### Ubuntu / Debian
 ```
-sudo apt install build-essential libboost-serialiation-dev
+sudo apt install build-essential libboost-serialiation-dev libwayland-dev libxkbcommon-dev wayland-protocols extra-cmake-modules xorg-dev
+
 ```
 #### Fedora
 ```
-sudo dnf install gcc-c++ boost-serialization
-```
-#### Arch Linux
-```
-sudo pacman install boost g++
+sudo dnf install gcc-c++ boost-serialization wayland-devel libxkbcommon-devel wayland-protocols-devel extra-cmake-modules libXcursor-devel libXi-devel libXinerama-devel libXrandr-devel
 ```
 
 To build the engine (as a shared library), simply run `make` after cloning this repository:

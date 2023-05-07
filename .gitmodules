@@ -1,3 +1,6 @@
 [submodule "engine/external/cpplog"]
 	path = engine/external/cpplog
 	url = git@github.com:fymue/cpplog.git
+[submodule "engine/external/glfw"]
+	path = engine/external/glfw
+	url = git@github.com:glfw/glfw.git
