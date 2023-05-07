@@ -24,6 +24,9 @@ struct PUB_API Vec2 {
   }
 
   inline T dist(Vec2 other) const {
+    T x_dist = std::abs(other.x - x);
+    T y_dist = std::abs(other.y - y);
+    return std::sqrt(x_dist * x_dist + y_dist * y_dist);
   }
 
   inline T len() const {
@@ -59,6 +62,10 @@ struct PUB_API Vec3 {
   }
 
   inline T dist(Vec3 other) const {
+    T x_dist = std::abs(other.x - x);
+    T y_dist = std::abs(other.y - y);
+    T z_dist = std::abs(other.z - z);
+    return std::sqrt(x_dist * x_dist + y_dist * y_dist + z_dist * z_dist);
   }
 
   inline T len() const {
@@ -93,6 +100,12 @@ struct PUB_API Vec4 {
   }
 
   inline T dist(Vec4 other) const {
+    T w_dist = std::abs(other.w - w);
+    T x_dist = std::abs(other.x - x);
+    T y_dist = std::abs(other.y - y);
+    T z_dist = std::abs(other.z - z);
+    return std::sqrt(w_dist * w_dist + x_dist * x_dist +
+                     y_dist * y_dist + z_dist * z_dist);
   }
 
   inline T len() const {
