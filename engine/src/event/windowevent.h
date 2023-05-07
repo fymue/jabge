@@ -1,7 +1,7 @@
 #ifndef ENGINE_SRC_EVENT_WINDOWEVENT_H_
 #define ENGINE_SRC_EVENT_WINDOWEVENT_H_
 
-#include "../core.h"
+#include "core.h"
 #include "event.h"
 
 namespace engine {
@@ -13,6 +13,7 @@ class PUB_API WindowClosedEvent: public Event {
 
 std::ostream &operator<<(std::ostream &stream, const WindowClosedEvent &event) {
   stream << event.get_name();
+  return stream;
 }
 
 class PUB_API WindowFocusedEvent: public Event {
@@ -23,6 +24,7 @@ class PUB_API WindowFocusedEvent: public Event {
 std::ostream &operator<<(std::ostream &stream,
                          const WindowFocusedEvent &event) {
   stream << event.get_name();
+  return stream;
 }
 
 class PUB_API WindowMovedEvent: public Event {
@@ -32,6 +34,7 @@ class PUB_API WindowMovedEvent: public Event {
 
 std::ostream &operator<<(std::ostream &stream, const WindowMovedEvent &event) {
   stream << event.get_name();
+  return stream;
 }
 
 class PUB_API WindowResizedEvent: public Event {
@@ -57,6 +60,7 @@ std::ostream &operator<<(std::ostream &stream,
                          const WindowResizedEvent &event) {
   stream << event.get_name() << ": "
          << event.get_width() << " x " << event.get_height();
+  return stream;
 }
 
 }  // namespace engine

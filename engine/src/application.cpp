@@ -3,11 +3,20 @@
 
 namespace engine {
 
-Application::Application() {}
-Application::~Application() {}
+Application::Application() :
+  _window(nullptr), _is_running(false) {
+  _window = Window::create(WindowProperties());
+  _is_running = true;
+}
+
+Application::~Application() {
+  delete _window;
+}
 
 void Application::run() {
-  while (true) {}
+  while (_is_running) {
+    _window->on_update();
+  }
 }
 
 }  // namespace engine

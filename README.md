@@ -25,7 +25,7 @@ sudo apt install build-essential libboost-serialiation-dev libwayland-dev libxkb
 ```
 #### Fedora
 ```
-sudo dnf install gcc-c++ boost-serialization wayland-devel libxkbcommon-devel wayland-protocols-devel extra-cmake-modules libXcursor-devel libXi-devel libXinerama-devel libXrandr-devel
+sudo dnf install gcc-c++ boost-serialization wayland-devel libxkbcommon-devel wayland-protocols-devel extra-cmake-modules libXcursor-devel libXi-devel libXinerama-devel libXrandr-devel mesa-libGL-devel
 ```
 
 To build the engine (as a shared library), simply run `make` after cloning this repository:

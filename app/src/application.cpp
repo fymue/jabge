@@ -4,7 +4,7 @@
 class App: public engine::Application {
  public:
   App() {
-    std::cerr << "created Sandbox app using engine\n";
+    ENGINE_LOG_INFO("CREATED SANDBOX APP USING ENGINE!");
   }
 
   ~App() {}

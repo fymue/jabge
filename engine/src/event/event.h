@@ -5,14 +5,14 @@
 #include <ostream>
 #include <functional>
 
-#include "../core.h"
+#include "core.h"
 
 namespace engine {
 
 #define EVENT_INIT(type) \
   static EventType get_type() {return EventType::type;}; \
   const char *get_name() const override {return #type;}; \
-  friend std::ostream &operator<<(std::ostream &stream, const type &event);
+  friend std::ostream &operator<<(std::ostream &stream, const type &event)
 
 enum class EventType {
   None,

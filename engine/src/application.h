@@ -2,10 +2,15 @@
 #define ENGINE_SRC_APPLICATION_H_
 
 #include "core.h"
+#include "window.h"
 
 namespace engine {
 
 class PUB_API Application {
+ private:
+  Window *_window;
+  bool _is_running;
+
  public:
   Application();
   virtual ~Application();

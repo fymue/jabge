@@ -1,7 +1,7 @@
 #ifndef ENGINE_SRC_EVENT_MOUSEEVENT_H_
 #define ENGINE_SRC_EVENT_MOUSEEVENT_H_
 
-#include "../core.h"
+#include "core.h"
 #include "event.h"
 
 namespace engine {
@@ -34,6 +34,7 @@ class PUB_API MousePressedEvent: public MouseButtonEvent {
 std::ostream &operator<<(std::ostream &stream, const MousePressedEvent &event) {
   stream << event.get_name() << ": " << event.get_button_code()
          << " (repeat: )" << event._repeat_count;
+  return stream;
 }
 
 class PUB_API MouseReleasedEvent: public MouseButtonEvent {
@@ -47,6 +48,7 @@ class PUB_API MouseReleasedEvent: public MouseButtonEvent {
 std::ostream &operator<<(std::ostream &stream,
                          const MouseReleasedEvent &event) {
   stream << event.get_name() << ": " << event.get_button_code();
+  return stream;
 }
 
 class PUB_API MouseMovedEvent: public Event {
@@ -71,6 +73,7 @@ class PUB_API MouseMovedEvent: public Event {
 std::ostream &operator<<(std::ostream &stream, const MouseMovedEvent &event) {
   stream << event.get_name() << ": x = "
          << event.get_x() << ", y = " << event.get_y();
+  return stream;
 }
 
 class PUB_API MouseScrolledEvent: public Event {
@@ -95,6 +98,7 @@ class PUB_API MouseScrolledEvent: public Event {
 std::ostream &operator<<(std::ostream &stream, const MouseMovedEvent &event) {
   stream << event.get_name() << ": x = "
          << event.get_x() << ", y = " << event.get_y();
+  return stream;
 }
 
 }  // namespace engine

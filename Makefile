@@ -31,12 +31,18 @@ GLFW_LIBRARY_DIR = $(GLFW_DIR)/build/src/
 GLFW_LINKER_FLAGS = -L/usr/local/lib64 -Wl,-rpath $(GLFW_LIBRARY_DIR) \
                     -L$(GLFW_LIBRARY_DIR) -lglfw3 -lrt -lm -ldl
 
-GLFW_INCLUDE_FLAGS = -I$(GLFW_DIR)/include
+GLFW_INCLUDE_FLAGS   = -I$(GLFW_DIR)/include
 ENGINE_INCLUDE_FLAGS = -I$(CURDIR)/engine/ -I$(CURDIR)/engine/src/ \
                        -I$(CURDIR)/engine/external/ $(GLFW_INCLUDE_FLAGS)
-APP_INCLUDE_FLAGS    = -I$(CURDIR)/engine/ -I$(CURDIR)/engine/external/
+APP_INCLUDE_FLAGS    = -I$(CURDIR)/engine/ -I$(CURDIR)/engine/src \
+                       -I$(CURDIR)/engine/external/
 
 APP_LINKER_FLAGS = -Wl,-rpath $(ENGINE_BIN_DIR) -lengine -L$(ENGINE_BIN_DIR)
+
+ENGINE_WINDOW_DIR = $(ENGINE_SRC_DIR)/window
+ENGINE_WINDOW_SRC_FILES := $(wildcard $(ENGINE_SRC_DIR)/window/*.cpp)
+ENGINE_WINDOW_OBJ_FILES := $(patsubst %.cpp,%.o,$(ENGINE_WINDOW_SRC_FILES))
+ENGINE_OBJ_FILES += $(ENGINE_WINDOW_OBJ_FILES)
 
 all: build_engine
 
@@ -47,11 +53,17 @@ precompile_header: $(PRECOMPILED_HEADER)
 
 # configure glfw (for Wayland) (generates Makefile using cmake)
 configure_glfw:
-	cmake -S $(GLFW_DIR) -B $(GLFW_DIR)/build -D GLFW_USE_WAYLAND=1
+	cmake -S $(GLFW_DIR) -B $(GLFW_DIR)/build
+# -D GLFW_USE_WAYLAND=1
 
 # build static glfw library and generate header files
 build_glfw: configure_glfw
 	cd $(GLFW_DIR)/build && make -j 4 && cd -
+
+# compile platform-specific window implementations (.o files will be stored in engine/src/window)
+$(ENGINE_WINDOW_DIR)/%.o : $(ENGINE_WINDOW_DIR)/%.cpp
+	$(CC) $(CFLAGS) -fPIC $(ENGINE_INCLUDE_FLAGS) \
+	$(DEBUG_FLAGS) $(BUILD_MACROS) -o $@ -c $<
 
 # compile engine (.o files will be stored in engine/src)
 $(ENGINE_SRC_DIR)/%.o : $(ENGINE_SRC_DIR)/%.cpp precompile_header build_glfw
@@ -62,17 +74,17 @@ $(ENGINE_SRC_DIR)/%.o : $(ENGINE_SRC_DIR)/%.cpp precompile_header build_glfw
 build_engine: $(ENGINE_OBJ_FILES)
 	$(CC) $(CFLAGS) $(DEBUG_FLAGS) \
 	-o $(ENGINE_LIBRARY_DIR) \
-	$(GLFW_LINKER_FLAGS) -shared $<
+	 -shared $^ $(GLFW_LINKER_FLAGS)
 
 # compile app (.o files will be stored in app/src)
 $(APP_SRC_DIR)/%.o : $(APP_SRC_DIR)/%.cpp
-	$(CC) $(CFLAGS) -fPIC $(APP_INCLUDE_FLAGS) \
+	$(CC) $(CFLAGS) $(APP_INCLUDE_FLAGS) \
 	$(DEBUG_FLAGS) -o $@ -c $<
-
 # build app (app/bin/app) (LD_LIBRARY_PATH still needs to be set)
 build_app: $(APP_OBJ_FILES)
-	$(CC) $(CFLAGS) $(DEBUG_FLAGS) $(APP_LINKER_FLAGS) \
-	-o $(APP_BIN_DIR)/$(APP_TARGET) $(APP_INCLUDE_FLAGS) $<
+	$(CC) $(CFLAGS) $(DEBUG_FLAGS) \
+	-o $(APP_BIN_DIR)/$(APP_TARGET) $(APP_INCLUDE_FLAGS) $^ \
+	$(APP_LINKER_FLAGS)
 
 clean:
 	rm -rf $(ENGINE_BIN_DIR)/$(ENGINE_TARGET) \
