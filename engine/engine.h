@@ -13,5 +13,8 @@
 #include "src/log.h"
 #include "src/application.h"
 #include "src/entrypoint.h"
+#include "src/window.h"
+#include "src/types.h"
+#include "src/event/event.h"
 
 #endif  // ENGINE_H_

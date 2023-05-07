@@ -9,7 +9,7 @@ ENGINE_BIN_DIR = $(CURDIR)/engine/bin
 ENGINE_SRC_DIR = $(CURDIR)/engine/src
 ENGINE_EXT_DIR = $(CURDIR)/engine/external
 ENGINE_TARGET  = libengine.so
-ENGINE_LIBRARY_DIR = $(ENGINE_BIN_DIR)/$(ENGINE_TARGET)
+ENGINE_LIBRARY = $(ENGINE_BIN_DIR)/$(ENGINE_TARGET)
 
 APP_BIN_DIR = $(CURDIR)/app/bin
 APP_SRC_DIR = $(CURDIR)/app/src
@@ -46,10 +46,7 @@ ENGINE_OBJ_FILES += $(ENGINE_WINDOW_OBJ_FILES)
 
 all: build_engine
 
-# precompile a header file with many common includes
-precompile_header: $(PRECOMPILED_HEADER)
-	$(CC) $(CFLAGS) $(DEBUG_FLAGS) -x c++-header \
-	-fPIC -o $(PRECOMPILED_HEADER).gch -c $(PRECOMPILED_HEADER)
+###### GLFW ######
 
 # configure glfw (for Wayland) (generates Makefile using cmake)
 configure_glfw:
@@ -60,10 +57,25 @@ configure_glfw:
 build_glfw: configure_glfw
 	cd $(GLFW_DIR)/build && make -j 4 && cd -
 
+###### \GLFW #####
+
+
+##### ENGINE WINDOW CLASSES ######
+
 # compile platform-specific window implementations (.o files will be stored in engine/src/window)
 $(ENGINE_WINDOW_DIR)/%.o : $(ENGINE_WINDOW_DIR)/%.cpp
 	$(CC) $(CFLAGS) -fPIC $(ENGINE_INCLUDE_FLAGS) \
 	$(DEBUG_FLAGS) $(BUILD_MACROS) -o $@ -c $<
+
+##### \ENGINE WINDOW CLASSES #####
+
+
+##### ENGINE SHARED LIBRARY ######
+
+# precompile a header file with many common includes
+precompile_header: $(PRECOMPILED_HEADER)
+	$(CC) $(CFLAGS) $(DEBUG_FLAGS) -x c++-header \
+	-fPIC -o $(PRECOMPILED_HEADER).gch -c $(PRECOMPILED_HEADER)
 
 # compile engine (.o files will be stored in engine/src)
 $(ENGINE_SRC_DIR)/%.o : $(ENGINE_SRC_DIR)/%.cpp precompile_header build_glfw
@@ -73,22 +85,31 @@ $(ENGINE_SRC_DIR)/%.o : $(ENGINE_SRC_DIR)/%.cpp precompile_header build_glfw
 # link engine to shared/dynamic library (engine/bin/libengine.so)
 build_engine: $(ENGINE_OBJ_FILES)
 	$(CC) $(CFLAGS) $(DEBUG_FLAGS) \
-	-o $(ENGINE_LIBRARY_DIR) \
-	 -shared $^ $(GLFW_LINKER_FLAGS)
+	-o $(ENGINE_LIBRARY) -shared $^ \
+	$(GLFW_LINKER_FLAGS)
+
+##### \ENGINE SHARED LIBRARY #####
+
+
+##### SANDBOX APP ######
 
 # compile app (.o files will be stored in app/src)
 $(APP_SRC_DIR)/%.o : $(APP_SRC_DIR)/%.cpp
 	$(CC) $(CFLAGS) $(APP_INCLUDE_FLAGS) \
 	$(DEBUG_FLAGS) -o $@ -c $<
-# build app (app/bin/app) (LD_LIBRARY_PATH still needs to be set)
+
+# build app (app/bin/app)
 build_app: $(APP_OBJ_FILES)
 	$(CC) $(CFLAGS) $(DEBUG_FLAGS) \
 	-o $(APP_BIN_DIR)/$(APP_TARGET) $(APP_INCLUDE_FLAGS) $^ \
 	$(APP_LINKER_FLAGS)
 
+##### \SANDBOX APP #####
+
+
 clean:
-	rm -rf $(ENGINE_BIN_DIR)/$(ENGINE_TARGET) \
-	$(ENGINE_SRC_DIR)/*.o $(APP_SRC_DIR)/*.o \
+	rm -rf $(ENGINE_LIBRARY) \
+	$(ENGINE_OBJ_FILES) \
 	$(ENGINE_SRC_DIR)/enginepch.h.gch \
 	$(APP_BIN_DIR)/$(APP_TARGET)
 	
