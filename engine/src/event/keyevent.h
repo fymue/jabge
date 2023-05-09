@@ -30,13 +30,12 @@ class PUB_API KeyPressedEvent: public KeyEvent {
 
   KeyPressedEvent(int key_code, int repeat_count) :
     KeyEvent(key_code), _repeat_count(repeat_count) {}
-};
 
-std::ostream &operator<<(std::ostream &stream, const KeyPressedEvent &event) {
-  stream << event.get_name() << ": " << event.get_key_code()
-         << " (repeat: )" << event._repeat_count;
-  return stream;
-}
+  void print(std::ostream &stream) const override {
+    stream << get_name() << ": " << get_key_code()
+           << " (repeat: )" << _repeat_count << " ";
+  }
+};
 
 class PUB_API KeyReleasedEvent: public KeyEvent {
  public:
@@ -44,12 +43,11 @@ class PUB_API KeyReleasedEvent: public KeyEvent {
 
   KeyReleasedEvent(int key_code):
     KeyEvent(key_code) {}
-};
 
-std::ostream &operator<<(std::ostream &stream, const KeyReleasedEvent &event) {
-  stream << event.get_name() << ": " << event.get_key_code();
-  return stream;
-}
+  void print(std::ostream &stream) const override {
+    stream << get_name() << ": " << get_key_code() << " ";
+  }
+};
 
 }  // namespace engine
 

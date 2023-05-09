@@ -11,8 +11,7 @@ namespace engine {
 
 #define EVENT_INIT(type) \
   static EventType get_type() {return EventType::type;}; \
-  const char *get_name() const override {return #type;}; \
-  friend std::ostream &operator<<(std::ostream &stream, const type &event)
+  const char *get_name() const override {return #type;};
 
 enum class EventType {
   None,
@@ -34,11 +33,17 @@ class PUB_API Event {
   Event():
     _handled(false) {}
 
+  virtual void print(std::ostream &stream) const = 0;
+
  public:
   friend class EventDispatcher;
 
-  virtual const char* get_name() const = 0;
-  friend std::ostream &operator<<(std::ostream &stream, const Event &event);
+  virtual const char *get_name() const = 0;
+
+  friend std::ostream &operator<<(std::ostream &stream, const Event &event) {
+    event.print(stream);
+    return stream;
+  }
 };
 
 // dispatches any event using the dispatch method,

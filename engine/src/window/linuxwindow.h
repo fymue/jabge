@@ -8,6 +8,10 @@ extern "C" {
 #include "window.h"
 #include "log.h"
 
+#include "event/windowevent.h"
+#include "event/keyevent.h"
+#include "event/mouseevent.h"
+
 namespace engine {
 
 class LinuxWindow: public Window {

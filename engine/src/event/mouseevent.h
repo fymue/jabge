@@ -21,21 +21,16 @@ class PUB_API MouseButtonEvent: public Event  {
 };
 
 class PUB_API MousePressedEvent: public MouseButtonEvent {
- private:
-  int _repeat_count;
-
  public:
   EVENT_INIT(MousePressedEvent)
 
-  MousePressedEvent(int button_code, int repeat_count):
-    MouseButtonEvent(button_code), _repeat_count(repeat_count) {}
-};
+  MousePressedEvent(int button_code):
+    MouseButtonEvent(button_code) {}
 
-std::ostream &operator<<(std::ostream &stream, const MousePressedEvent &event) {
-  stream << event.get_name() << ": " << event.get_button_code()
-         << " (repeat: )" << event._repeat_count;
-  return stream;
-}
+  void print(std::ostream &stream) const override {
+    stream << get_name() << " (Button: " << get_button_code() << " ";
+  }
+};
 
 class PUB_API MouseReleasedEvent: public MouseButtonEvent {
  public:
@@ -43,63 +38,59 @@ class PUB_API MouseReleasedEvent: public MouseButtonEvent {
 
   MouseReleasedEvent(int button_code):
     MouseButtonEvent(button_code) {}
-};
 
-std::ostream &operator<<(std::ostream &stream,
-                         const MouseReleasedEvent &event) {
-  stream << event.get_name() << ": " << event.get_button_code();
-  return stream;
-}
+  void print(std::ostream &stream) const override {
+    stream << get_name() << "(Button: " << get_button_code() << ") ";
+  }
+};
 
 class PUB_API MouseMovedEvent: public Event {
  private:
-  float _x, _y;
+  double _x_pos, _y_pos;
 
  public:
   EVENT_INIT(MouseMovedEvent)
 
-  MouseMovedEvent(float x, float y):
-    _x(x), _y(y) {}
+  MouseMovedEvent(double x_pos, double y_pos):
+    _x_pos(x_pos), _y_pos(y_pos) {}
 
-  inline float get_x() const {
-    return _x;
+  inline double get_x_pos() const {
+    return _x_pos;
   }
 
-  inline float get_y() const {
-    return _y;
+  inline double get_y_pos() const {
+    return _y_pos;
+  }
+
+  void print(std::ostream &stream) const override {
+    stream << get_name() << ": x_pos = "
+           << _x_pos << ", y_pos = " << _y_pos << " ";
   }
 };
 
-std::ostream &operator<<(std::ostream &stream, const MouseMovedEvent &event) {
-  stream << event.get_name() << ": x = "
-         << event.get_x() << ", y = " << event.get_y();
-  return stream;
-}
-
 class PUB_API MouseScrolledEvent: public Event {
  private:
-  float _x, _y;
+  double _x_offset, _y_offset;
 
  public:
   EVENT_INIT(MouseScrolledEvent)
 
-  MouseScrolledEvent(float x, float y):
-    _x(x), _y(y) {}
+  MouseScrolledEvent(double x, double y):
+    _x_offset(x), _y_offset(y) {}
 
-  inline float get_x() const {
-    return _x;
+  inline double get_x_offset() const {
+    return _x_offset;
   }
 
-  inline float get_y() const {
-    return _y;
+  inline double get_y_offset() const {
+    return _y_offset;
+  }
+
+  void print(std::ostream &stream) const override {
+    stream << get_name() << ": x = "
+           << _x_offset << ", y = " << _y_offset << " ";
   }
 };
-
-std::ostream &operator<<(std::ostream &stream, const MouseMovedEvent &event) {
-  stream << event.get_name() << ": x = "
-         << event.get_x() << ", y = " << event.get_y();
-  return stream;
-}
 
 }  // namespace engine
 

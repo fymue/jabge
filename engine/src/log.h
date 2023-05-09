@@ -3,6 +3,7 @@
 
 #include "core.h"
 #include "cpplog/log.h"
+#include "event/event.h"
 
 #ifndef NDEBUG
   #define __LOG_LEVEL cpplog::Level::DEBUG
@@ -19,6 +20,10 @@ namespace engine {
 class EngineLogImpl: public cpplog::LoggerImpl {
  public:
   using cpplog::LoggerImpl::log;
+
+  void log(std::ostream &stream, const Event &e, cpplog::LogFormat fmt) {
+    parse_fmt_opts(stream, e, fmt);
+  }
 };
 
 /*
@@ -48,8 +53,8 @@ class PUB_API Log {
   }
 };
 
-std::shared_ptr<cpplog::Logger<EngineLogImpl>> Log::engine_log;
-std::shared_ptr<cpplog::Logger<EngineLogImpl>> Log::app_log;
+inline std::shared_ptr<cpplog::Logger<EngineLogImpl>> Log::engine_log;
+inline std::shared_ptr<cpplog::Logger<EngineLogImpl>> Log::app_log;
 
 }  // namespace engine
 
