@@ -6,6 +6,7 @@
 #include "log.h"
 
 #include "event/event.h"
+#include "event/windowevent.h"
 
 #define BIND_EVENT(func) std::bind(&func, this, std::placeholders::_1)
 
@@ -21,6 +22,9 @@ class PUB_API Application {
   virtual ~Application();
 
   void run();
+
+  bool on_window_close(WindowClosedEvent *e);
+
   void on_event(Event *e);
 };
 

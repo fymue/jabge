@@ -8,7 +8,7 @@ namespace engine {
 
 static bool is_glfw_initialized = false;
 
-// ### callback functions for every window event ###
+// ### callback functions for every window/key/mouse event ###
 
 static auto __resize_callback = [](GLFWwindow *window, int width, int height) {
   WindowData *data = GET_WINDOW_USER_PTR(window);
@@ -110,10 +110,19 @@ static auto __error_callback = [](int err, const char *msg) {
 
 // #################################################
 
+// create a new linux window based on the specified window
+// properties and transfer ownership to the window to the caller
 Window *Window::create(const WindowProperties &props) {
   return new LinuxWindow(props);
 }
 
+/*
+ * initialize the linx window ased on the specified window properties;
+ * this method initiliazes GLFW and creates a new GLFW window and provides
+ * it with the window data of this window via GLFW's setWindowUserPointer
+ * function;
+ * this init method also sets all window-event-related callbacks
+ */
 void LinuxWindow::init(const WindowProperties &props) {
   _data.width = props.width;
   _data.height = props.height;
@@ -164,6 +173,7 @@ LinuxWindow::~LinuxWindow() {
   glfwDestroyWindow(_window);
 }
 
+// process all pending events and swap the buffers (every frame)
 void LinuxWindow::on_update() {
   glfwPollEvents();
   glfwSwapBuffers(_window);

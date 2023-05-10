@@ -6,6 +6,7 @@
 
 namespace engine {
 
+// base event for a mouse button press
 class PUB_API MouseButtonEvent: public Event  {
  private:
   int _button_code;
@@ -20,9 +21,10 @@ class PUB_API MouseButtonEvent: public Event  {
   }
 };
 
+// handle what happens if a mouse button is pressed
 class PUB_API MousePressedEvent: public MouseButtonEvent {
  public:
-  EVENT_INIT(MousePressedEvent)
+  EVENT_INIT(EventType::MousePressedEvent)
 
   MousePressedEvent(int button_code):
     MouseButtonEvent(button_code) {}
@@ -32,9 +34,10 @@ class PUB_API MousePressedEvent: public MouseButtonEvent {
   }
 };
 
+// handle what happens if a mouse button is released
 class PUB_API MouseReleasedEvent: public MouseButtonEvent {
  public:
-  EVENT_INIT(MouseReleasedEvent)
+  EVENT_INIT(EventType::MouseReleasedEvent)
 
   MouseReleasedEvent(int button_code):
     MouseButtonEvent(button_code) {}
@@ -44,12 +47,13 @@ class PUB_API MouseReleasedEvent: public MouseButtonEvent {
   }
 };
 
+// handle what happens if the mouse is moved
 class PUB_API MouseMovedEvent: public Event {
  private:
   double _x_pos, _y_pos;
 
  public:
-  EVENT_INIT(MouseMovedEvent)
+  EVENT_INIT(EventType::MouseMovedEvent)
 
   MouseMovedEvent(double x_pos, double y_pos):
     _x_pos(x_pos), _y_pos(y_pos) {}
@@ -68,12 +72,13 @@ class PUB_API MouseMovedEvent: public Event {
   }
 };
 
+// handle what happens if the user scrolled inside the application
 class PUB_API MouseScrolledEvent: public Event {
  private:
   double _x_offset, _y_offset;
 
  public:
-  EVENT_INIT(MouseScrolledEvent)
+  EVENT_INIT(EventType::MouseScrolledEvent)
 
   MouseScrolledEvent(double x, double y):
     _x_offset(x), _y_offset(y) {}

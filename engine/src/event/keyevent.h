@@ -21,12 +21,13 @@ class PUB_API KeyEvent: public Event  {
   }
 };
 
+// handle what happens if a key is pressed or held
 class PUB_API KeyPressedEvent: public KeyEvent {
  private:
   int _repeat_count;
 
  public:
-  EVENT_INIT(KeyPressedEvent)
+  EVENT_INIT(EventType::KeyPressedEvent)
 
   KeyPressedEvent(int key_code, int repeat_count) :
     KeyEvent(key_code), _repeat_count(repeat_count) {}
@@ -37,9 +38,10 @@ class PUB_API KeyPressedEvent: public KeyEvent {
   }
 };
 
+// handle what happens if a key is released
 class PUB_API KeyReleasedEvent: public KeyEvent {
  public:
-  EVENT_INIT(KeyReleasedEvent)
+  EVENT_INIT(EventType::KeyReleasedEvent)
 
   KeyReleasedEvent(int key_code):
     KeyEvent(key_code) {}

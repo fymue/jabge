@@ -6,21 +6,23 @@
 
 namespace engine {
 
+// handle what happens when a window is closed
 class PUB_API WindowClosedEvent: public Event {
  public:
-  EVENT_INIT(WindowClosedEvent)
+  EVENT_INIT(EventType::WindowClosedEvent)
 
   void print(std::ostream &stream) const override {
     stream << get_name() << " ";
   }
 };
 
+// handle what happens if a window is brought into the foreground
 class PUB_API WindowFocusedEvent: public Event {
  private:
   int _focus;
 
  public:
-  EVENT_INIT(WindowFocusedEvent)
+  EVENT_INIT(EventType::WindowFocusedEvent)
 
   WindowFocusedEvent(int focus) :
     _focus(focus) {}
@@ -36,19 +38,20 @@ class PUB_API WindowFocusedEvent: public Event {
 
 class PUB_API WindowMovedEvent: public Event {
  public:
-  EVENT_INIT(WindowMovedEvent)
+  EVENT_INIT(EventType::WindowMovedEvent)
 
   void print(std::ostream &stream) const override {
     stream << get_name() << " ";
   }
 };
 
+// handle window resizing
 class PUB_API WindowResizedEvent: public Event {
  private:
   float _width, _height;
 
  public:
-  EVENT_INIT(WindowResizedEvent)
+  EVENT_INIT(EventType::WindowResizedEvent)
 
   WindowResizedEvent(float width, float height) :
     _width(width), _height(height) {}

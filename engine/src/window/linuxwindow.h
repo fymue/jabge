@@ -14,6 +14,8 @@ extern "C" {
 
 namespace engine {
 
+// implementation of a window on Linux-based operating systems
+// (uses GLFW for everything window-management/callback related)
 class LinuxWindow: public Window {
  private:
   GLFWwindow *_window;
@@ -40,6 +42,8 @@ class LinuxWindow: public Window {
     return _data.name;
   }
 
+  // set the callback function of the window
+  // (is set to Application::on_event(Event *e) in application.cpp)
   inline void set_event_callback(const CallBackFunction &callback_fn) override {
     _data.callback_fn = callback_fn;
   }

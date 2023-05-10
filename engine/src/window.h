@@ -8,7 +8,7 @@ namespace engine {
 
 using CallBackFunction = std::function<void(Event*)>;
 
-// define window properties
+// define basic window properties
 class WindowProperties {
  public:
   int width, height;
@@ -22,7 +22,15 @@ class WindowProperties {
     width(width), height(height), name(name) {}
 };
 
-// window data (for GLFW)
+/*
+ * every implementation of the base "Window" class
+ * contains a "WindowData" object that is passed
+ * to the GLFWwindow object as a "WindowUserPointer";
+ * this object is mainly used to call the callback function
+ * of the "Window" object, which is bound to the "on_event"
+ * function in the main "Application" class, which dispatches
+ * any event and calls it's "on_event" function
+ */
 struct WindowData {
   int width, height;
   std::string name;
@@ -30,7 +38,7 @@ struct WindowData {
   CallBackFunction callback_fn;
 };
 
-// Window interface
+// Window interface (is implemented separately for every platform)
 class PUB_API Window {
  public:
   virtual ~Window() {}

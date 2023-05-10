@@ -20,8 +20,18 @@ void Application::run() {
   }
 }
 
+bool Application::on_window_close(WindowClosedEvent *e) {
+  // stop the main game loop
+  _is_running = false;
+
+  return true;
+}
 void Application::on_event(Event *e) {
   ENGINE_LOG_INFO(*e);
+
+  EventDispatcher dispatcher(e);
+  dispatcher.dispatch<WindowClosedEvent>(
+    BIND_EVENT(Application::on_window_close));
 }
 
 }  // namespace engine
