@@ -23,7 +23,8 @@ ENGINE_OBJ_FILES := $(patsubst %.cpp,%.o,$(ENGINE_SRC_FILES))
 APP_SRC_FILES := $(wildcard $(APP_SRC_DIR)/*.cpp)
 APP_OBJ_FILES := $(patsubst %.cpp,%.o,$(APP_SRC_FILES))
 
-PRECOMPILED_HEADER = $(ENGINE_SRC_DIR)/enginepch.h
+PRECOMPILED_HEADER_SRC = $(ENGINE_SRC_DIR)/enginepch.h
+PRECOMPILED_HEADER_TARGET = $(ENGINE_SRC_DIR)/enginepch.h.gch
 
 GLFW_DIR = $(ENGINE_EXT_DIR)/glfw
 GLFW_MAKEFILE = $(GLFW_DIR)/build/src/Makefile
@@ -73,12 +74,12 @@ $(ENGINE_WINDOW_DIR)/%.o : $(ENGINE_WINDOW_DIR)/%.cpp
 ##### ENGINE SHARED LIBRARY ######
 
 # precompile a header file with many common includes
-precompile_header: $(PRECOMPILED_HEADER)
+$(PRECOMPILED_HEADER_TARGET) : $(PRECOMPILED_HEADER_SRC)
 	$(CC) $(CFLAGS) $(DEBUG_FLAGS) -x c++-header \
-	-fPIC -o $(PRECOMPILED_HEADER).gch -c $(PRECOMPILED_HEADER)
+	-fPIC -c $(PRECOMPILED_HEADER_SRC)
 
 # compile engine (.o files will be stored in engine/src)
-$(ENGINE_SRC_DIR)/%.o : $(ENGINE_SRC_DIR)/%.cpp precompile_header build_glfw
+$(ENGINE_SRC_DIR)/%.o : $(ENGINE_SRC_DIR)/%.cpp $(PRECOMPILED_HEADER_TARGET) build_glfw
 	$(CC) $(CFLAGS) -fPIC $(ENGINE_INCLUDE_FLAGS) \
 	$(DEBUG_FLAGS) $(BUILD_MACROS) -o $@ -c $<
 
@@ -110,7 +111,7 @@ build_app: $(APP_OBJ_FILES)
 clean:
 	rm -rf $(ENGINE_LIBRARY) \
 	$(ENGINE_OBJ_FILES) \
-	$(ENGINE_SRC_DIR)/enginepch.h.gch \
+	$(PRECOMPILED_HEADER_TARGET) \
 	$(APP_BIN_DIR)/$(APP_TARGET)
 	
 .PHONY: all clean
