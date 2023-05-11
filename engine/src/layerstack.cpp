@@ -3,10 +3,14 @@
 
 namespace engine {
 
+LayerStack::LayerStack() {
+  _layer_stack.reserve(10);
+  _overlay_start = _layer_stack.begin();
+}
+
 LayerStack::~LayerStack() {
-  for (auto layer = _layer_stack.rbegin();
-       layer != _layer_stack.rend(); --layer) {
-    delete *layer;
+  for (Layer *layer : _layer_stack) {
+    delete layer;
   }
 }
 

@@ -13,9 +13,7 @@ class PUB_API LayerStack {
   LStack::iterator _overlay_start;
 
  public:
-  LayerStack() :
-    _layer_stack(10), _overlay_start(_layer_stack.begin()) {}
-
+  LayerStack();
   ~LayerStack();
 
   // add layer to layer stack

@@ -15,6 +15,7 @@
 #include "src/entrypoint.h"
 #include "src/window.h"
 #include "src/types.h"
+#include "layer.h"
 #include "layerstack.h"
 #include "src/event/event.h"
 

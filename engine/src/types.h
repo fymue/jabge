@@ -1,6 +1,8 @@
 #ifndef ENGINE_SRC_TYPES_H_
 #define ENGINE_SRC_TYPES_H_
 
+#include <cmath>
+
 #include "core.h"
 
 namespace engine {

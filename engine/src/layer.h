@@ -8,7 +8,8 @@ namespace engine {
 
 class PUB_API Layer {
  public:
-  virtual ~Layer();
+  Layer() {}
+  virtual ~Layer() {}
 
   // ... when layer is pushed onto layer stack
   virtual void on_push() {}

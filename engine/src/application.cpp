@@ -6,7 +6,16 @@ namespace engine {
 Application::Application() :
   _window(nullptr), _is_running(false) {
   _window = Window::create(WindowProperties());
+
+  /*
+   * bind the Application::on_event function to every callback
+   * function of the window, meaning that any event that is
+   * created or received by the window is passed to
+   * Application::on_event and is handled either directly or
+   * by one of the layers on the layer stack
+   */
   _window->set_event_callback(BIND_EVENT(Application::on_event));
+
   _is_running = true;
 }
 
@@ -30,14 +39,20 @@ void Application::pop_overlay(Layer *layer) {
   _layers.pop_overlay(layer);
 }
 
+/*
+ * start main loop of the application;
+ * this loop runs until e.g. the window is closed
+ * and calls the "on_update" methods of all layers
+ * and the window every frame
+ */
 void Application::run() {
   while (_is_running) {
-    // run on_update for every layer
+    // run on_update for every layer (starting from lowest layer)
     for (Layer *layer : _layers) {
       layer->on_update();
     }
 
-    // update the window
+    // after all layers have been updated, update the window
     _window->on_update();
   }
 }
@@ -56,13 +71,14 @@ void Application::on_event(Event *e) {
     BIND_EVENT(Application::on_window_close));
 
   /*
-   * run on_event for every layer in reverse order,
+   * run on_event for every layer in REVERSE ORDER,
    * starting with potential overlay layers,
-   * so overlays can handle events and potentially consume them;
-   * the loop stops as soon as the event is handled
+   * so overlays can handle events first and potentially consume them;
+   * the loop stops as soon as the event is handled, meaning once
+   * an event is consumed, it isn't passed further down to a lower layer
    */
   for (auto layer = _layers.rbegin();
-       !(e->is_handled()) && layer != _layers.rend(); --layer) {
+       !(e->is_handled()) && layer != _layers.rend(); layer++) {
     (*layer)->on_event(e);
   }
 }
