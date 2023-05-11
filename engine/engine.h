@@ -1,5 +1,5 @@
-#ifndef ENGINE_H_
-#define ENGINE_H_
+#ifndef ENGINE_ENGINE_H_
+#define ENGINE_ENGINE_H_
 
 /*
  * Public API of the engine, which exposes every core part
@@ -15,6 +15,7 @@
 #include "src/entrypoint.h"
 #include "src/window.h"
 #include "src/types.h"
+#include "layerstack.h"
 #include "src/event/event.h"
 
-#endif  // ENGINE_H_
+#endif  // ENGINE_ENGINE_H_

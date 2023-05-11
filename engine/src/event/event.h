@@ -60,6 +60,10 @@ class PUB_API Event {
     event.print(stream);
     return stream;
   }
+
+  bool is_handled() const {
+    return _handled;
+  }
 };
 
 // dispatches any event using the dispatch method,
