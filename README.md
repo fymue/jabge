@@ -30,7 +30,7 @@ sudo dnf install gcc-c++ boost-serialization wayland-devel libxkbcommon-devel wa
 
 To build the engine (as a shared library), simply run `make` after cloning this repository:
 ```
-git clone https://github.com/fymue/jabge
+git clone --recursive https://github.com/fymue/jabge
 cd jabge
 make
 ```

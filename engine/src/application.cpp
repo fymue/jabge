@@ -25,18 +25,22 @@ Application::~Application() {
 
 void Application::push_layer(Layer *layer) {
   _layers.push(layer);
+  layer->on_push();
 }
 
 void Application::pop_layer(Layer *layer) {
   _layers.pop(layer);
+  layer->on_pop();
 }
 
 void Application::push_overlay(Layer *layer) {
   _layers.push_overlay(layer);
+  layer->on_push();
 }
 
 void Application::pop_overlay(Layer *layer) {
   _layers.pop_overlay(layer);
+  layer->on_pop();
 }
 
 /*

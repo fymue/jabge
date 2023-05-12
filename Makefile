@@ -55,6 +55,21 @@ $(GLAD_SRC_DIR)/%.o : $(GLAD_SRC_DIR)/%.c
 ###### \GLAD #####
 
 
+###### IMGUI ######
+
+IMGUI_DIR = $(ENGINE_EXT_DIR)/imgui
+IMGUI_INCLUDE_FLAGS = -I$(IMGUI_DIR)
+
+IMGUI_SRC_FILES := $(wildcard $(IMGUI_DIR)/*.cpp)
+IMGUI_OBJ_FILES := $(patsubst %.cpp,%.o,$(IMGUI_SRC_FILES))
+
+# compile IMGUI
+$(IMGUI_DIR)/%.o : $(IMGUI_DIR)/%.cpp
+	$(CC) $(CFLAGS) $(IMGUI_INCLUDE_FLAGS) -fPIC $(DEBUG_FLAGS) -o $@ -c $<
+
+###### \IMGUI #####
+
+
 ##### ENGINE WINDOW CLASSES ######
 
 ENGINE_WINDOW_DIR = $(ENGINE_SRC_DIR)/window
@@ -83,7 +98,8 @@ $(PRECOMPILED_HEADER_TARGET) : $(PRECOMPILED_HEADER_SRC)
 ENGINE_INCLUDE_FLAGS = -I$(CURDIR)/engine/ -I$(CURDIR)/engine/src/ \
                        -I$(CURDIR)/engine/external/ \
 					   $(GLFW_INCLUDE_FLAGS) \
-					   $(GLAD_INCLUDE_FLAGS)
+					   $(GLAD_INCLUDE_FLAGS) \
+					   $(IMGUI_INCLUDE_FLAGS)
 
 # compile engine (.o files will be stored in engine/src)
 $(ENGINE_SRC_DIR)/%.o : $(ENGINE_SRC_DIR)/%.cpp $(PRECOMPILED_HEADER_TARGET) build_glfw
@@ -91,10 +107,9 @@ $(ENGINE_SRC_DIR)/%.o : $(ENGINE_SRC_DIR)/%.cpp $(PRECOMPILED_HEADER_TARGET) bui
 	$(DEBUG_FLAGS) $(BUILD_MACROS) -o $@ -c $<
 
 # link engine to shared/dynamic library (engine/bin/libengine.so)
-build_engine: $(GLAD_OBJ_FILES) $(ENGINE_OBJ_FILES)
-	$(CC) $(CFLAGS) $(DEBUG_FLAGS) \
-	-o $(ENGINE_LIBRARY) -shared $^ \
-	$(GLFW_LINKER_FLAGS)
+build_engine: $(GLAD_OBJ_FILES) $(IMGUI_OBJ_FILES) $(ENGINE_OBJ_FILES)
+	$(CC) -o $(ENGINE_LIBRARY) -shared $^ \
+	$(GLFW_LINKER_FLAGS) $(LDFLAGS)
 
 ##### \ENGINE SHARED LIBRARY #####
 
@@ -108,8 +123,8 @@ APP_TARGET  = app
 APP_SRC_FILES := $(wildcard $(APP_SRC_DIR)/*.cpp)
 APP_OBJ_FILES := $(patsubst %.cpp,%.o,$(APP_SRC_FILES))
 
-APP_INCLUDE_FLAGS    = -I$(CURDIR)/engine/ -I$(CURDIR)/engine/src \
-                       -I$(CURDIR)/engine/external/
+APP_INCLUDE_FLAGS = -I$(CURDIR)/engine/ -I$(CURDIR)/engine/src \
+                    -I$(CURDIR)/engine/external/
 
 APP_LINKER_FLAGS = -Wl,-rpath $(ENGINE_BIN_DIR) -lengine -L$(ENGINE_BIN_DIR)
 
@@ -128,11 +143,13 @@ build_app: $(APP_OBJ_FILES)
 
 
 clean:
-	rm -rf $(ENGINE_LIBRARY) \
+	rm -rf \
+	$(ENGINE_LIBRARY) \
 	$(ENGINE_OBJ_FILES) \
 	$(PRECOMPILED_HEADER_TARGET) \
 	$(APP_BIN_DIR)/$(APP_TARGET) \
 	$(APP_OBJ_FILES) \
-	$(GLAD_OBJ_FILES)
+	$(GLAD_OBJ_FILES) \
+	$(IMGUI_OBJ_FILES)
 	
 .PHONY: all clean
