@@ -7,6 +7,11 @@
 namespace engine {
 
 class PUB_API Layer {
+ private:
+#ifndef NDEBUG
+  std::string _name;
+#endif
+
  public:
   Layer() {}
   virtual ~Layer() {}
@@ -22,6 +27,12 @@ class PUB_API Layer {
 
   // handle event in current layer
   virtual void on_event(Event *e) {}
+
+#ifndef NDEBUG
+  const std::string &get_name() const {
+    return _name;
+  }
+#endif
 };
 
 }  // namespace engine

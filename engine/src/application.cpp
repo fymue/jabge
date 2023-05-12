@@ -24,21 +24,25 @@ Application::~Application() {
 }
 
 void Application::push_layer(Layer *layer) {
+  ENGINE_ASSERT(layer, "Layer passed to push_layer is NULL!");
   _layers.push(layer);
   layer->on_push();
 }
 
 void Application::pop_layer(Layer *layer) {
+  ENGINE_ASSERT(layer, "Layer passed to pop_layer is NULL!");
   _layers.pop(layer);
   layer->on_pop();
 }
 
 void Application::push_overlay(Layer *layer) {
+  ENGINE_ASSERT(layer, "Layer passed to push_overlay is NULL!");
   _layers.push_overlay(layer);
   layer->on_push();
 }
 
 void Application::pop_overlay(Layer *layer) {
+  ENGINE_ASSERT(layer, "Layer passed to pop_overlay is NULL!");
   _layers.pop_overlay(layer);
   layer->on_pop();
 }
@@ -53,6 +57,7 @@ void Application::run() {
   while (_is_running) {
     // run on_update for every layer (starting from lowest layer)
     for (Layer *layer : _layers) {
+      ENGINE_ASSERT(layer, "Layer in layer stack is NULL!");
       layer->on_update();
     }
 
@@ -68,6 +73,7 @@ bool Application::on_window_close(WindowClosedEvent *e) {
   return true;
 }
 void Application::on_event(Event *e) {
+  ENGINE_ASSERT(e, "Event passed to on_event function is NULL!");
   ENGINE_LOG_INFO(*e);
 
   EventDispatcher dispatcher(e);

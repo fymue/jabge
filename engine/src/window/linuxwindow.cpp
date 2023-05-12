@@ -12,6 +12,8 @@ static bool is_glfw_initialized = false;
 
 static auto __resize_callback = [](GLFWwindow *window, int width, int height) {
   WindowData *data = GET_WINDOW_USER_PTR(window);
+  ENGINE_ASSERT(data, "Couldn't get window data from GLFW!");
+
   data->width = width;
   data->height = height;
 
@@ -22,6 +24,7 @@ static auto __resize_callback = [](GLFWwindow *window, int width, int height) {
 
 static auto __close_callback = [](GLFWwindow *window) {
   WindowData *data = GET_WINDOW_USER_PTR(window);
+  ENGINE_ASSERT(data, "Couldn't get window data from GLFW!");
 
   // dispatch close event
   WindowClosedEvent event;
@@ -30,6 +33,7 @@ static auto __close_callback = [](GLFWwindow *window) {
 
 static auto __focus_callback = [](GLFWwindow *window, int focus) {
   WindowData *data = GET_WINDOW_USER_PTR(window);
+  ENGINE_ASSERT(data, "Couldn't get window data from GLFW!");
 
   // dispatch focus event
   WindowFocusedEvent event(focus);
@@ -39,6 +43,7 @@ static auto __focus_callback = [](GLFWwindow *window, int focus) {
 static auto __key_callback = [](GLFWwindow *window, int key_code,
                                 int scan_code, int key_action, int mods) {
   WindowData *data = GET_WINDOW_USER_PTR(window);
+  ENGINE_ASSERT(data, "Couldn't get window data from GLFW!");
 
   // determine key action and dispatch appropriate key event
   switch (key_action) {
@@ -66,6 +71,7 @@ static auto __key_callback = [](GLFWwindow *window, int key_code,
 static auto __mouse_button_callback = [](GLFWwindow *window, int button,
                                          int action, int mods) {
   WindowData *data = GET_WINDOW_USER_PTR(window);
+  ENGINE_ASSERT(data, "Couldn't get window data from GLFW!");
 
   // determine key action and dispatch appropriate key event
   switch (action) {
@@ -87,6 +93,7 @@ static auto __mouse_button_callback = [](GLFWwindow *window, int button,
 static auto __move_callback = [](GLFWwindow *window,
                                  double x_pos, double y_pos) {
   WindowData *data = GET_WINDOW_USER_PTR(window);
+  ENGINE_ASSERT(data, "Couldn't get window data from GLFW!");
 
   // dispatch (mouse) move event
   MouseMovedEvent event(x_pos, y_pos);
@@ -96,6 +103,7 @@ static auto __move_callback = [](GLFWwindow *window,
 static auto __scroll_callback = [](GLFWwindow *window,
                                    double x_offset, double y_offset) {
   WindowData *data = GET_WINDOW_USER_PTR(window);
+  ENGINE_ASSERT(data, "Couldn't get window data from GLFW!");
 
   // dispatch scroll event
   MouseScrolledEvent event(x_offset, y_offset);
@@ -130,25 +138,20 @@ void LinuxWindow::init(const WindowProperties &props) {
 
   if (!is_glfw_initialized) {
     int success = glfwInit();
+    ENGINE_ASSERT(success, "Window couldn't be initialized!");
 
-    if (success) {
-        is_glfw_initialized = true;
-        _window = glfwCreateWindow(_data.width, _data.height,
-                                   _data.name.c_str(), nullptr, nullptr);
-        glfwMakeContextCurrent(_window);
+    is_glfw_initialized = true;
+    _window = glfwCreateWindow(_data.width, _data.height,
+                               _data.name.c_str(), nullptr, nullptr);
+    glfwMakeContextCurrent(_window);
 
-        // pass custom data to window
-        glfwSetWindowUserPointer(_window, &_data);
-        set_vsync(true);
+    // pass custom data to window
+    glfwSetWindowUserPointer(_window, &_data);
+    set_vsync(true);
 
-        int glad_init_success =
-          gladLoadGL(reinterpret_cast<GLADloadfunc>(glfwGetProcAddress));
-        std::cerr << "glad init success: " << glad_init_success << "\n";
-    } else {
-      // TODO(fymue): should probably assert here, so write custom assert funcs
-      ENGINE_LOG_ERROR("Window couldn't be initialized!");
-      std::exit(1);
-    }
+    int glad_init_success =
+      gladLoadGL(reinterpret_cast<GLADloadfunc>(glfwGetProcAddress));
+    ENGINE_ASSERT(glad_init_success, "Failed to initialize GLAD!");
   }
 
   // window callbacks

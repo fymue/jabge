@@ -2,7 +2,9 @@ CC = g++
 CFLAGS = -Wall -Wextra
 RELEASE_FLAGS = -O3 -DNDEBUG
 DEBUG_FLAGS   = -g
-SHELL = /bin/sh
+LDFLAGS = 
+SHELL = /usr/bin/sh
+CMAKE = /usr/bin/cmake
 
 BUILD_MACROS = -DBUILD_ENGINE
 
@@ -29,7 +31,7 @@ GLFW_INCLUDE_FLAGS   = -I$(GLFW_DIR)/include
 
 # configure glfw (for Wayland) (generates Makefile using cmake)
 configure_glfw:
-	cmake -S $(GLFW_DIR) -B $(GLFW_DIR)/build
+	$(CMAKE) -S $(GLFW_DIR) -B $(GLFW_DIR)/build
 # -D GLFW_USE_WAYLAND=1
 
 # build static glfw library and generate header files

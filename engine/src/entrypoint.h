@@ -14,10 +14,11 @@
 extern engine::Application* engine::init();
 
 int main(int argc, char **argv) {
-  // FIXME add proper engine init function and move this there
   engine::Log::init();
 
   engine::Application *app = engine::init();
+  ENGINE_ASSERT(app, "Failed to initialize Application!");
+
   app->run();
 
   delete app;
