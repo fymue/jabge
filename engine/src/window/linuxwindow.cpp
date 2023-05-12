@@ -140,6 +140,10 @@ void LinuxWindow::init(const WindowProperties &props) {
         // pass custom data to window
         glfwSetWindowUserPointer(_window, &_data);
         set_vsync(true);
+
+        int glad_init_success =
+          gladLoadGL(reinterpret_cast<GLADloadfunc>(glfwGetProcAddress));
+        std::cerr << "glad init success: " << glad_init_success << "\n";
     } else {
       // TODO(fymue): should probably assert here, so write custom assert funcs
       ENGINE_LOG_ERROR("Window couldn't be initialized!");

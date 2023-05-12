@@ -2,6 +2,7 @@
 #define ENGINE_SRC_WINDOW_LINUXWINDOW_H_
 
 extern "C" {
+  #include <glad/gl.h>
   #include <GLFW/glfw3.h>
 }
 

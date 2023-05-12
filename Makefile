@@ -2,6 +2,7 @@ CC = g++
 CFLAGS = -Wall -Wextra
 RELEASE_FLAGS = -O3 -DNDEBUG
 DEBUG_FLAGS   = -g
+SHELL = /bin/sh
 
 BUILD_MACROS = -DBUILD_ENGINE
 
@@ -11,43 +12,20 @@ ENGINE_EXT_DIR = $(CURDIR)/engine/external
 ENGINE_TARGET  = libengine.so
 ENGINE_LIBRARY = $(ENGINE_BIN_DIR)/$(ENGINE_TARGET)
 
-APP_BIN_DIR = $(CURDIR)/app/bin
-APP_SRC_DIR = $(CURDIR)/app/src
-APP_TARGET  = app
-
-SHELL = /bin/sh
-
 ENGINE_SRC_FILES := $(wildcard $(ENGINE_SRC_DIR)/*.cpp)
 ENGINE_OBJ_FILES := $(patsubst %.cpp,%.o,$(ENGINE_SRC_FILES))
 
-APP_SRC_FILES := $(wildcard $(APP_SRC_DIR)/*.cpp)
-APP_OBJ_FILES := $(patsubst %.cpp,%.o,$(APP_SRC_FILES))
 
-PRECOMPILED_HEADER_SRC = $(ENGINE_SRC_DIR)/enginepch.h
-PRECOMPILED_HEADER_TARGET = $(ENGINE_SRC_DIR)/enginepch.h.gch
+all: build_engine
+
+###### GLFW ######
 
 GLFW_DIR = $(ENGINE_EXT_DIR)/glfw
 GLFW_MAKEFILE = $(GLFW_DIR)/build/src/Makefile
 GLFW_LIBRARY_DIR = $(GLFW_DIR)/build/src/
 GLFW_LINKER_FLAGS = -L/usr/local/lib64 -Wl,-rpath $(GLFW_LIBRARY_DIR) \
                     -L$(GLFW_LIBRARY_DIR) -lglfw3 -lrt -lm -ldl
-
 GLFW_INCLUDE_FLAGS   = -I$(GLFW_DIR)/include
-ENGINE_INCLUDE_FLAGS = -I$(CURDIR)/engine/ -I$(CURDIR)/engine/src/ \
-                       -I$(CURDIR)/engine/external/ $(GLFW_INCLUDE_FLAGS)
-APP_INCLUDE_FLAGS    = -I$(CURDIR)/engine/ -I$(CURDIR)/engine/src \
-                       -I$(CURDIR)/engine/external/
-
-APP_LINKER_FLAGS = -Wl,-rpath $(ENGINE_BIN_DIR) -lengine -L$(ENGINE_BIN_DIR)
-
-ENGINE_WINDOW_DIR = $(ENGINE_SRC_DIR)/window
-ENGINE_WINDOW_SRC_FILES := $(wildcard $(ENGINE_SRC_DIR)/window/*.cpp)
-ENGINE_WINDOW_OBJ_FILES := $(patsubst %.cpp,%.o,$(ENGINE_WINDOW_SRC_FILES))
-ENGINE_OBJ_FILES += $(ENGINE_WINDOW_OBJ_FILES)
-
-all: build_engine
-
-###### GLFW ######
 
 # configure glfw (for Wayland) (generates Makefile using cmake)
 configure_glfw:
@@ -61,7 +39,28 @@ build_glfw: configure_glfw
 ###### \GLFW #####
 
 
+###### GLAD ######
+
+GLAD_DIR = $(ENGINE_EXT_DIR)/glad
+GLAD_SRC_DIR = $(GLAD_DIR)/src
+GLAD_INCLUDE_FLAGS = -I$(GLAD_DIR)/include
+
+GLAD_SRC_FILES := $(wildcard $(GLAD_SRC_DIR)/*.c)
+GLAD_OBJ_FILES := $(patsubst %.c,%.o,$(GLAD_SRC_FILES))
+
+# compile GLAD
+$(GLAD_SRC_DIR)/%.o : $(GLAD_SRC_DIR)/%.c
+	$(CC) $(CFLAGS) $(GLAD_INCLUDE_FLAGS) -fPIC $(DEBUG_FLAGS) -o $@ -c $<
+
+###### \GLAD #####
+
+
 ##### ENGINE WINDOW CLASSES ######
+
+ENGINE_WINDOW_DIR = $(ENGINE_SRC_DIR)/window
+ENGINE_WINDOW_SRC_FILES := $(wildcard $(ENGINE_SRC_DIR)/window/*.cpp)
+ENGINE_WINDOW_OBJ_FILES := $(patsubst %.cpp,%.o,$(ENGINE_WINDOW_SRC_FILES))
+ENGINE_OBJ_FILES += $(ENGINE_WINDOW_OBJ_FILES)
 
 # compile platform-specific window implementations (.o files will be stored in engine/src/window)
 $(ENGINE_WINDOW_DIR)/%.o : $(ENGINE_WINDOW_DIR)/%.cpp
@@ -73,10 +72,18 @@ $(ENGINE_WINDOW_DIR)/%.o : $(ENGINE_WINDOW_DIR)/%.cpp
 
 ##### ENGINE SHARED LIBRARY ######
 
+PRECOMPILED_HEADER_SRC = $(ENGINE_SRC_DIR)/enginepch.h
+PRECOMPILED_HEADER_TARGET = $(ENGINE_SRC_DIR)/enginepch.h.gch
+
 # precompile a header file with many common includes
 $(PRECOMPILED_HEADER_TARGET) : $(PRECOMPILED_HEADER_SRC)
 	$(CC) $(CFLAGS) $(DEBUG_FLAGS) -x c++-header \
 	-fPIC -c $(PRECOMPILED_HEADER_SRC)
+
+ENGINE_INCLUDE_FLAGS = -I$(CURDIR)/engine/ -I$(CURDIR)/engine/src/ \
+                       -I$(CURDIR)/engine/external/ \
+					   $(GLFW_INCLUDE_FLAGS) \
+					   $(GLAD_INCLUDE_FLAGS)
 
 # compile engine (.o files will be stored in engine/src)
 $(ENGINE_SRC_DIR)/%.o : $(ENGINE_SRC_DIR)/%.cpp $(PRECOMPILED_HEADER_TARGET) build_glfw
@@ -84,7 +91,7 @@ $(ENGINE_SRC_DIR)/%.o : $(ENGINE_SRC_DIR)/%.cpp $(PRECOMPILED_HEADER_TARGET) bui
 	$(DEBUG_FLAGS) $(BUILD_MACROS) -o $@ -c $<
 
 # link engine to shared/dynamic library (engine/bin/libengine.so)
-build_engine: $(ENGINE_OBJ_FILES)
+build_engine: $(GLAD_OBJ_FILES) $(ENGINE_OBJ_FILES)
 	$(CC) $(CFLAGS) $(DEBUG_FLAGS) \
 	-o $(ENGINE_LIBRARY) -shared $^ \
 	$(GLFW_LINKER_FLAGS)
@@ -93,6 +100,18 @@ build_engine: $(ENGINE_OBJ_FILES)
 
 
 ##### SANDBOX APP ######
+
+APP_BIN_DIR = $(CURDIR)/app/bin
+APP_SRC_DIR = $(CURDIR)/app/src
+APP_TARGET  = app
+
+APP_SRC_FILES := $(wildcard $(APP_SRC_DIR)/*.cpp)
+APP_OBJ_FILES := $(patsubst %.cpp,%.o,$(APP_SRC_FILES))
+
+APP_INCLUDE_FLAGS    = -I$(CURDIR)/engine/ -I$(CURDIR)/engine/src \
+                       -I$(CURDIR)/engine/external/
+
+APP_LINKER_FLAGS = -Wl,-rpath $(ENGINE_BIN_DIR) -lengine -L$(ENGINE_BIN_DIR)
 
 # compile app (.o files will be stored in app/src)
 $(APP_SRC_DIR)/%.o : $(APP_SRC_DIR)/%.cpp
@@ -113,6 +132,7 @@ clean:
 	$(ENGINE_OBJ_FILES) \
 	$(PRECOMPILED_HEADER_TARGET) \
 	$(APP_BIN_DIR)/$(APP_TARGET) \
-	$(APP_OBJ_FILES)
+	$(APP_OBJ_FILES) \
+	$(GLAD_OBJ_FILES)
 	
 .PHONY: all clean
