@@ -17,13 +17,14 @@ namespace engine {
  * extends cpplog::LoggerImpl with engine-specific types
  * so these types can be logged properly as well
  */
-class EngineLogImpl: public cpplog::LoggerImpl {
+class PUB_API EngineLogImpl: public cpplog::LoggerImpl {
  public:
   using cpplog::LoggerImpl::log;
+  using cpplog::LoggerImpl::parse_fmt_opts;
 
-  void log(std::ostream &stream, const Event &e, cpplog::LogFormat fmt) {
-    parse_fmt_opts(stream, e, fmt);
-  }
+  EngineLogImpl();
+
+  void log(std::ostream &stream, const Event &e, cpplog::LogFormat fmt);
 };
 
 /*
@@ -36,13 +37,7 @@ class PUB_API Log {
   static shared_log app_log;
 
  public:
-  static void init() {
-    engine_log = shared_log(cpplog::create_log("ENGINE", new EngineLogImpl()));
-    engine_log->set_log_level(__LOG_LEVEL);
-
-    app_log = shared_log(cpplog::create_log("APP", new EngineLogImpl()));
-    app_log->set_log_level(__LOG_LEVEL);
-  }
+  static void init();
 
   inline static shared_log &get_engine_log() {
     return engine_log;
@@ -52,9 +47,6 @@ class PUB_API Log {
     return app_log;
   }
 };
-
-inline std::shared_ptr<cpplog::Logger<EngineLogImpl>> Log::engine_log;
-inline std::shared_ptr<cpplog::Logger<EngineLogImpl>> Log::app_log;
 
 }  // namespace engine
 

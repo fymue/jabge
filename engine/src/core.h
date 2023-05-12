@@ -26,4 +26,31 @@
   #define PUB_API IMPORT
 #endif
 
+// assert statements
+
+#include <iostream>
+
+static void __engine_assert(bool check, const char *msg) {
+  if (!check) {
+    std::cerr << msg << "\n";;
+    std::exit(1);
+  }
+}
+
+static void __engine_basic_assert(bool check, const char *msg) {
+  if (!check) {
+    std::cerr << "Assertion \"" << msg << "\" failed!\n";
+    std::exit(1);
+  }
+}
+
+#ifdef NDEBUG
+  #define ENGINE_ASSERT(check, msg)
+  #define ENGINE_BASIC_ASSERT(check)
+#else
+  #define ENGINE_ASSERT(check, msg)   __engine_assert(check, msg)
+
+  #define ENGINE_BASIC_ASSERT(check)  __engine_basic_assert(check, #check)
+#endif
+
 #endif  // ENGINE_SRC_CORE_H_
