@@ -4,6 +4,7 @@
 #include <cmath>
 
 #include "core.h"
+#include "serialize.h"
 
 namespace engine {
 
@@ -40,6 +41,8 @@ struct PUB_API Vec2 {
     T length = len();
     return Vec2(x / length, y / length);
   }
+
+  MAKE_SERIALIZEABLE(x, y)
 };
 
 template<typename T = float>
@@ -79,6 +82,8 @@ struct PUB_API Vec3 {
     T length = len();
     return Vec3(x / length, y / length, z / length);
   }
+
+  MAKE_SERIALIZEABLE(x, y, z)
 };
 
 template<typename T = float>
@@ -119,6 +124,8 @@ struct PUB_API Vec4 {
     T length = len();
     return Vec4(w / length, x / length, y / length, z / length);
   }
+
+  MAKE_SERIALIZEABLE(w, x, y, z)
 };
 
 template<typename T = float>

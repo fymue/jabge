@@ -41,7 +41,6 @@ This will build the shared library `libengine.so` in the `engine/bin` directory,
 
 ### TODO
 
-- add assert macros w/ custom message and and asserts in relevant code sections
 - add debug name to layers (wrap in #ifndef NDEBUG)
 - refactor Makefile to cmake
 
