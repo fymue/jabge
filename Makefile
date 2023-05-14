@@ -1,8 +1,7 @@
 CC = g++
-CFLAGS = -Wall -Wextra
-RELEASE_FLAGS = -O3 -DNDEBUG
-DEBUG_FLAGS   = -g
-LDFLAGS = 
+CFLAGS = -Wall -Wextra -O3 -DNDEBUG
+DEBUG_FLAGS = -Wall -Wextra -g
+LDFLAGS = -lboost_serialization
 SHELL = /usr/bin/sh
 CMAKE = /usr/bin/cmake
 
@@ -17,8 +16,13 @@ ENGINE_LIBRARY = $(ENGINE_BIN_DIR)/$(ENGINE_TARGET)
 ENGINE_SRC_FILES := $(wildcard $(ENGINE_SRC_DIR)/*.cpp)
 ENGINE_OBJ_FILES := $(patsubst %.cpp,%.o,$(ENGINE_SRC_FILES))
 
-
+# default: release mode
 all: build_engine
+
+# if debug target is called, CFLAGS variable is overwritten with DEBUG_FLAGS
+debug: CFLAGS = $(DEBUG_FLAGS)
+
+debug: build_engine
 
 ###### GLFW ######
 
@@ -52,7 +56,7 @@ GLAD_OBJ_FILES := $(patsubst %.c,%.o,$(GLAD_SRC_FILES))
 
 # compile GLAD
 $(GLAD_SRC_DIR)/%.o : $(GLAD_SRC_DIR)/%.c
-	$(CC) $(CFLAGS) $(GLAD_INCLUDE_FLAGS) -fPIC $(DEBUG_FLAGS) -o $@ -c $<
+	$(CC) $(CFLAGS) $(GLAD_INCLUDE_FLAGS) -fPIC -o $@ -c $<
 
 ###### \GLAD #####
 
@@ -67,7 +71,7 @@ IMGUI_OBJ_FILES := $(patsubst %.cpp,%.o,$(IMGUI_SRC_FILES))
 
 # compile IMGUI
 $(IMGUI_DIR)/%.o : $(IMGUI_DIR)/%.cpp
-	$(CC) $(CFLAGS) $(IMGUI_INCLUDE_FLAGS) -fPIC $(DEBUG_FLAGS) -o $@ -c $<
+	$(CC) $(CFLAGS) $(IMGUI_INCLUDE_FLAGS) -fPIC -o $@ -c $<
 
 ###### \IMGUI #####
 
@@ -82,7 +86,7 @@ ENGINE_OBJ_FILES += $(ENGINE_WINDOW_OBJ_FILES)
 # compile platform-specific window implementations (.o files will be stored in engine/src/window)
 $(ENGINE_WINDOW_DIR)/%.o : $(ENGINE_WINDOW_DIR)/%.cpp
 	$(CC) $(CFLAGS) -fPIC $(ENGINE_INCLUDE_FLAGS) \
-	$(DEBUG_FLAGS) $(BUILD_MACROS) -o $@ -c $<
+	$(BUILD_MACROS) -o $@ -c $<
 
 ##### \ENGINE WINDOW CLASSES #####
 
@@ -94,7 +98,7 @@ PRECOMPILED_HEADER_TARGET = $(ENGINE_SRC_DIR)/enginepch.h.gch
 
 # precompile a header file with many common includes
 $(PRECOMPILED_HEADER_TARGET) : $(PRECOMPILED_HEADER_SRC)
-	$(CC) $(CFLAGS) $(DEBUG_FLAGS) -x c++-header \
+	$(CC) $(CFLAGS) -x c++-header \
 	-fPIC -c $(PRECOMPILED_HEADER_SRC)
 
 ENGINE_INCLUDE_FLAGS = -I$(CURDIR)/engine/ -I$(CURDIR)/engine/src/ \
@@ -106,7 +110,7 @@ ENGINE_INCLUDE_FLAGS = -I$(CURDIR)/engine/ -I$(CURDIR)/engine/src/ \
 # compile engine (.o files will be stored in engine/src)
 $(ENGINE_SRC_DIR)/%.o : $(ENGINE_SRC_DIR)/%.cpp $(PRECOMPILED_HEADER_TARGET) build_glfw
 	$(CC) $(CFLAGS) -fPIC $(ENGINE_INCLUDE_FLAGS) \
-	$(DEBUG_FLAGS) $(BUILD_MACROS) -o $@ -c $<
+	$(BUILD_MACROS) -o $@ -c $<
 
 # link engine to shared/dynamic library (engine/bin/libengine.so)
 build_engine: $(GLAD_OBJ_FILES) $(IMGUI_OBJ_FILES) $(ENGINE_OBJ_FILES)
@@ -132,12 +136,11 @@ APP_LINKER_FLAGS = -Wl,-rpath $(ENGINE_BIN_DIR) -lengine -L$(ENGINE_BIN_DIR)
 
 # compile app (.o files will be stored in app/src)
 $(APP_SRC_DIR)/%.o : $(APP_SRC_DIR)/%.cpp
-	$(CC) $(CFLAGS) $(APP_INCLUDE_FLAGS) \
-	$(DEBUG_FLAGS) -o $@ -c $<
+	$(CC) $(CFLAGS) $(APP_INCLUDE_FLAGS) -o $@ -c $<
 
 # build app (app/bin/app)
 build_app: $(APP_OBJ_FILES)
-	$(CC) $(CFLAGS) $(DEBUG_FLAGS) \
+	$(CC) $(CFLAGS) \
 	-o $(APP_BIN_DIR)/$(APP_TARGET) $(APP_INCLUDE_FLAGS) $^ \
 	$(APP_LINKER_FLAGS)
 

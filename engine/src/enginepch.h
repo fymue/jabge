@@ -19,4 +19,6 @@
 #include <functional>
 #include <cmath>
 
+#include "serialize.h"
+
 #endif  // ENGINE_SRC_ENGINEPCH_H_
