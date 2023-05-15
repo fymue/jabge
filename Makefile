@@ -134,6 +134,10 @@ APP_INCLUDE_FLAGS = -I$(CURDIR)/engine/ -I$(CURDIR)/engine/src \
 
 APP_LINKER_FLAGS = -Wl,-rpath $(ENGINE_BIN_DIR) -lengine -L$(ENGINE_BIN_DIR)
 
+debug_app : CFLAGS = $(DEBUG_FLAGS)
+
+debug_app : build_app
+
 # compile app (.o files will be stored in app/src)
 $(APP_SRC_DIR)/%.o : $(APP_SRC_DIR)/%.cpp
 	$(CC) $(CFLAGS) $(APP_INCLUDE_FLAGS) -o $@ -c $<
@@ -156,5 +160,8 @@ clean:
 	$(APP_OBJ_FILES) \
 	$(GLAD_OBJ_FILES) \
 	$(IMGUI_OBJ_FILES)
+
+clean_app:
+	rm -rf $(APP_BIN_DIR)/$(APP_TARGET) $(APP_OBJ_FILES)
 	
-.PHONY: all clean
+.PHONY: all clean clean_app

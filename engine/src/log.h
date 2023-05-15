@@ -4,6 +4,7 @@
 #include "core.h"
 #include "cpplog/log.h"
 #include "event/event.h"
+#include "layer.h"
 
 #ifndef NDEBUG
   #define __LOG_LEVEL cpplog::Level::DEBUG
@@ -24,15 +25,20 @@ class PUB_API EngineLogImpl: public cpplog::LoggerImpl {
 
   EngineLogImpl();
 
+  // log an event
   void log(std::ostream &stream, const Event &e, cpplog::LogFormat fmt);
+
+  // log a layer
+  void log(std::ostream &stream, const Layer &l, cpplog::LogFormat fmt);
 };
+
+typedef std::shared_ptr<cpplog::Logger<EngineLogImpl>> shared_log;
 
 /*
  * wrapper aroung cpplog::Logger class for logging
  */
 class PUB_API Log {
  private:
-  typedef std::shared_ptr<cpplog::Logger<EngineLogImpl>> shared_log;
   static shared_log engine_log;
   static shared_log app_log;
 

@@ -18,7 +18,7 @@
 #include "boost/serialization/unique_ptr.hpp"
 
 
-// base case for parameter pack expansion
+// base case for end of parameter pack expansion
 template<class Archive>
 static void __serialize(Archive &ar) {}
 

@@ -7,7 +7,7 @@ class App: public engine::Application {
  public:
   App() {
     APP_LOG_INFO("CREATED SANDBOX APP USING ENGINE!");
-    TestLayer * t = new TestLayer();
+    TestLayer * t = new TestLayer("Test Layer");
     t->on_update();
     push_layer(t);
   }

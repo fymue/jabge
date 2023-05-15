@@ -8,6 +8,9 @@ class TestLayer: public engine::Layer {
   TestLayer() :
     Layer() {}
 
+  TestLayer(const char *name) :
+    Layer(name) {}
+
   ~TestLayer() {}
 
   void on_event(engine::Event *e) override {
@@ -15,7 +18,7 @@ class TestLayer: public engine::Layer {
   }
 
   void on_update() override {
-    APP_LOG_INFO("Updating TestLayer");
+    APP_LOG_INFO(*this);
   }
 };
 

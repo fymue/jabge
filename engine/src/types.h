@@ -46,7 +46,7 @@ struct PUB_API Vec2 {
 };
 
 template<typename T = float>
-inline std::ostream &operator<<(std::ostream &stream, Vec2<T> vec);
+std::ostream &operator<<(std::ostream &stream, Vec2<T> vec);
 
 template<typename T = float>
 struct PUB_API Vec3 {
@@ -87,7 +87,7 @@ struct PUB_API Vec3 {
 };
 
 template<typename T = float>
-inline std::ostream &operator<<(std::ostream &stream, Vec3<T> vec);
+std::ostream &operator<<(std::ostream &stream, Vec3<T> vec);
 
 template<typename T = float>
 struct PUB_API Vec4 {
@@ -129,7 +129,22 @@ struct PUB_API Vec4 {
 };
 
 template<typename T = float>
-inline std::ostream &operator<<(std::ostream &stream, Vec4<T> vec);
+std::ostream &operator<<(std::ostream &stream, Vec4<T> vec);
+
+template<typename T = float>
+inline T dot(Vec2<T> lhs, Vec2<T> rhs) {
+  return lhs.dot(rhs);
+}
+
+template<typename T = float>
+inline T dot(Vec3<T> lhs, Vec3<T> rhs) {
+  return lhs.dot(rhs);
+}
+
+template<typename T = float>
+inline T dot(Vec4<T> lhs, Vec4<T> rhs) {
+  return lhs.dot(rhs);
+}
 
 }  // namespace engine
 

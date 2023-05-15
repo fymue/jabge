@@ -11,8 +11,13 @@ void EngineLogImpl::log(std::ostream &stream, const Event &e,
   parse_fmt_opts(stream, e, fmt);
 }
 
-std::shared_ptr<cpplog::Logger<EngineLogImpl>> Log::engine_log;
-std::shared_ptr<cpplog::Logger<EngineLogImpl>> Log::app_log;
+void EngineLogImpl::log(std::ostream &stream, const Layer &l,
+                        cpplog::LogFormat fmt) {
+  parse_fmt_opts(stream, l, fmt);
+}
+
+shared_log Log::engine_log;
+shared_log Log::app_log;
 
 void Log::init() {
   engine_log = shared_log(cpplog::create_log("ENGINE", new EngineLogImpl()));
