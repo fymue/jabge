@@ -3,12 +3,13 @@
 
 #include <cstring>
 
+
 #include "core.h"
 #include "event/event.h"
 
 namespace engine {
 
-static constexpr uint8_t MAX_LAYER_NAME_LEN = 30;
+static constexpr unsigned char MAX_LAYER_NAME_LEN = 30;
 
 /*
  * base class for a Layer;

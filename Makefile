@@ -79,7 +79,7 @@ $(IMGUI_DIR)/%.o : $(IMGUI_DIR)/%.cpp
 ##### ENGINE WINDOW CLASSES ######
 
 ENGINE_WINDOW_DIR = $(ENGINE_SRC_DIR)/window
-ENGINE_WINDOW_SRC_FILES := $(wildcard $(ENGINE_SRC_DIR)/window/*.cpp)
+ENGINE_WINDOW_SRC_FILES := $(wildcard $(ENGINE_WINDOW_DIR)/*.cpp)
 ENGINE_WINDOW_OBJ_FILES := $(patsubst %.cpp,%.o,$(ENGINE_WINDOW_SRC_FILES))
 ENGINE_OBJ_FILES += $(ENGINE_WINDOW_OBJ_FILES)
 
@@ -89,6 +89,34 @@ $(ENGINE_WINDOW_DIR)/%.o : $(ENGINE_WINDOW_DIR)/%.cpp
 	$(BUILD_MACROS) -o $@ -c $<
 
 ##### \ENGINE WINDOW CLASSES #####
+
+##### ENGINE LAYER CLASSES ######
+
+ENGINE_LAYER_DIR = $(ENGINE_SRC_DIR)/layer
+ENGINE_LAYER_SRC_FILES := $(wildcard $(ENGINE_LAYER_DIR)/*.cpp)
+ENGINE_LAYER_OBJ_FILES := $(patsubst %.cpp,%.o,$(ENGINE_LAYER_SRC_FILES))
+ENGINE_OBJ_FILES += $(ENGINE_LAYER_OBJ_FILES)
+
+# compile layer implementations (.o files will be stored in engine/src/layer)
+$(ENGINE_LAYER_DIR)/%.o : $(ENGINE_LAYER_DIR)/%.cpp
+	$(CC) $(CFLAGS) -fPIC $(ENGINE_INCLUDE_FLAGS) \
+	$(BUILD_MACROS) -o $@ -c $<
+
+##### \ENGINE WINDOW CLASSES #####
+
+##### ENGINE IMGUI OPENGL RENDERER ######
+
+ENGINE_OPENGL_DIR = $(ENGINE_SRC_DIR)/opengl
+ENGINE_OPENGL_SRC_FILES := $(wildcard $(ENGINE_OPENGL_DIR)/*.cpp)
+ENGINE_OPENGL_OBJ_FILES := $(patsubst %.cpp,%.o,$(ENGINE_OPENGL_SRC_FILES))
+ENGINE_OBJ_FILES += $(ENGINE_OPENGL_OBJ_FILES)
+
+# compile ImGUI OPENGL renderer (.o files will be stored in engine/src/opengl)
+$(ENGINE_OPENGL_DIR)/%.o : $(ENGINE_OPENGL_DIR)/%.cpp
+	$(CC) $(CFLAGS) -fPIC $(ENGINE_INCLUDE_FLAGS) \
+	$(BUILD_MACROS) -o $@ -c $<
+
+##### \ENGINE IMGUI OPENGL RENDERER #####
 
 
 ##### ENGINE SHARED LIBRARY ######
