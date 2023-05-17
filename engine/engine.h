@@ -9,14 +9,15 @@
  * to use the engine
 */
 
-#include "src/core.h"
-#include "src/log.h"
-#include "src/application.h"
-#include "src/entrypoint.h"
-#include "src/window.h"
-#include "src/types.h"
+#include "core.h"
+#include "log.h"
+#include "application.h"
+#include "entrypoint.h"
+#include "window.h"
+#include "types.h"
 #include "layer.h"
+#include "layer/imguilayer.h"
 #include "layerstack.h"
-#include "src/event/event.h"
+#include "event/event.h"
 
 #endif  // ENGINE_ENGINE_H_

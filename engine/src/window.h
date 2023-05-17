@@ -9,7 +9,7 @@ namespace engine {
 using CallBackFunction = std::function<void(Event*)>;
 
 // define basic window properties
-class WindowProperties {
+class PUB_API WindowProperties {
  public:
   int width, height;
   std::string name;
@@ -31,7 +31,7 @@ class WindowProperties {
  * function in the main "Application" class, which dispatches
  * any event and calls it's "on_event" function
  */
-struct WindowData {
+struct PUB_API WindowData {
   int width, height;
   std::string name;
   bool vsync;
@@ -40,6 +40,11 @@ struct WindowData {
 
 // Window interface (is implemented separately for every platform)
 class PUB_API Window {
+ protected:
+  WindowData _data;
+
+  Window() {}
+
  public:
   virtual ~Window() {}
 
@@ -50,6 +55,10 @@ class PUB_API Window {
 
   virtual void on_update() = 0;
   virtual void set_event_callback(const CallBackFunction &callback_fn) = 0;
+
+  inline const WindowData &get_window_data() const {
+    return _data;
+  }
 
   static Window *create(const WindowProperties &props);
 };

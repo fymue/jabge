@@ -34,7 +34,7 @@ class PUB_API KeyPressedEvent: public KeyEvent {
 
   void print(std::ostream &stream) const override {
     stream << get_name() << ": " << get_key_code()
-           << " (repeat: )" << _repeat_count << " ";
+           << " (repeat: " << _repeat_count << ") ";
   }
 };
 

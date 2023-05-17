@@ -6,3 +6,4 @@ app/bin/
 lint.sh
 *.o
 *.gch
+imgui.ini

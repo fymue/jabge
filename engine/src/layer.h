@@ -3,7 +3,7 @@
 
 #include <cstring>
 
-
+#include "window.h"
 #include "core.h"
 #include "event/event.h"
 
@@ -22,7 +22,17 @@ static constexpr unsigned char MAX_LAYER_NAME_LEN = 30;
  * as the "on_event" method defining what happens if
  * an event is passed to and potentially handled by
  * the layer; in Debug mode, the can be given a name
- * for e.g. logging
+ * for e.g. logging;
+ * each layer implementation has to be constructed
+ * with a valid (const) reference to a WindowData object;
+ * since a layer is supposed to be pushed to the layer
+ * stack from the main application, the reference
+ * to the WindowData object can be taken
+ * from the Application's object;
+ * the WindowData reference is used to e.g.
+ * get the current display size of the window
+ * so it can be passed to renderer whenever a layer
+ * is supposed to be updated
  */
 class PUB_API Layer {
  private:
@@ -30,11 +40,16 @@ class PUB_API Layer {
   char _name[MAX_LAYER_NAME_LEN];
 #endif
 
+ protected:
+  const WindowData &_window_data;
+
  public:
-  Layer() {}
+  Layer(const WindowData &window_data) :
+    _window_data(window_data) {}
 
 #ifndef NDEBUG
-  explicit Layer(const char *name) {
+  explicit Layer(const char *name, const WindowData &window_data) :
+    _window_data(window_data) {
     std::strncpy(_name, name, MAX_LAYER_NAME_LEN);
   }
 #else

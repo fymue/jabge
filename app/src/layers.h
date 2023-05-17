@@ -5,11 +5,11 @@
 
 class TestLayer: public engine::Layer {
  public:
-  TestLayer() :
-    Layer() {}
+  TestLayer(const engine::WindowData &data) :
+    Layer(data) {}
 
-  TestLayer(const char *name) :
-    Layer(name) {}
+  TestLayer(const char *name, const engine::WindowData &data) :
+    Layer(name, data) {}
 
   ~TestLayer() {}
 

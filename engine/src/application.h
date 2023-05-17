@@ -20,6 +20,19 @@ class PUB_API Application {
   bool _is_running;
   LayerStack _layers;
 
+ protected:
+  inline int get_window_width() const {
+    return _window->get_width();
+  }
+
+  inline int get_window_height() const {
+    return _window->get_height();
+  }
+
+  inline const WindowData &get_window_data() const {
+    return _window->get_window_data();
+  }
+
  public:
   Application();
   virtual ~Application();

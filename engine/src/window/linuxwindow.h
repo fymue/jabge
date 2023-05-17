@@ -20,7 +20,6 @@ namespace engine {
 class LinuxWindow: public Window {
  private:
   GLFWwindow *_window;
-  WindowData _data;
 
   void init(const WindowProperties &props);
 

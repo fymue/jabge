@@ -76,6 +76,13 @@ $(IMGUI_DIR)/%.o : $(IMGUI_DIR)/%.cpp
 ###### \IMGUI #####
 
 
+ENGINE_INCLUDE_FLAGS = -I$(CURDIR)/engine/ -I$(CURDIR)/engine/src/ \
+                       -I$(CURDIR)/engine/external/ \
+					   $(GLFW_INCLUDE_FLAGS) \
+					   $(GLAD_INCLUDE_FLAGS) \
+					   $(IMGUI_INCLUDE_FLAGS)
+
+
 ##### ENGINE WINDOW CLASSES ######
 
 ENGINE_WINDOW_DIR = $(ENGINE_SRC_DIR)/window
@@ -129,12 +136,6 @@ $(PRECOMPILED_HEADER_TARGET) : $(PRECOMPILED_HEADER_SRC)
 	$(CC) $(CFLAGS) -x c++-header \
 	-fPIC -c $(PRECOMPILED_HEADER_SRC)
 
-ENGINE_INCLUDE_FLAGS = -I$(CURDIR)/engine/ -I$(CURDIR)/engine/src/ \
-                       -I$(CURDIR)/engine/external/ \
-					   $(GLFW_INCLUDE_FLAGS) \
-					   $(GLAD_INCLUDE_FLAGS) \
-					   $(IMGUI_INCLUDE_FLAGS)
-
 # compile engine (.o files will be stored in engine/src)
 $(ENGINE_SRC_DIR)/%.o : $(ENGINE_SRC_DIR)/%.cpp $(PRECOMPILED_HEADER_TARGET) build_glfw
 	$(CC) $(CFLAGS) -fPIC $(ENGINE_INCLUDE_FLAGS) \
@@ -157,8 +158,7 @@ APP_TARGET  = app
 APP_SRC_FILES := $(wildcard $(APP_SRC_DIR)/*.cpp)
 APP_OBJ_FILES := $(patsubst %.cpp,%.o,$(APP_SRC_FILES))
 
-APP_INCLUDE_FLAGS = -I$(CURDIR)/engine/ -I$(CURDIR)/engine/src \
-                    -I$(CURDIR)/engine/external/
+APP_INCLUDE_FLAGS = $(ENGINE_INCLUDE_FLAGS)
 
 APP_LINKER_FLAGS = -Wl,-rpath $(ENGINE_BIN_DIR) -lengine -L$(ENGINE_BIN_DIR)
 
