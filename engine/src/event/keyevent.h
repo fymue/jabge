@@ -51,6 +51,19 @@ class PUB_API KeyReleasedEvent: public KeyEvent {
   }
 };
 
+// handle what happens if a key was typed (i.e. which character on the keyboard)
+class PUB_API KeyTypedEvent: public KeyEvent {
+ public:
+  EVENT_INIT(EventType::KeyTypedEvent)
+
+  KeyTypedEvent(int key_code):
+    KeyEvent(key_code) {}
+
+  void print(std::ostream &stream) const override {
+    stream << get_name() << ": " << get_key_code() << " ";
+  }
+};
+
 }  // namespace engine
 
 #endif  // ENGINE_SRC_EVENT_KEYEVENT_H_

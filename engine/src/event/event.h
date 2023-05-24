@@ -18,7 +18,7 @@ namespace engine {
  */
 enum class EventType {
   None,
-  KeyPressedEvent, KeyReleasedEvent,
+  KeyPressedEvent, KeyReleasedEvent, KeyTypedEvent,
   WindowClosedEvent, WindowResizedEvent, WindowFocusedEvent, WindowMovedEvent,
   MousePressedEvent, MouseReleasedEvent, MouseMovedEvent, MouseScrolledEvent
 };

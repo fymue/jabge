@@ -68,6 +68,14 @@ static auto __key_callback = [](GLFWwindow *window, int key_code,
   }
 };
 
+static auto __char_callback =  [](GLFWwindow *window, unsigned int key_code) {
+  WindowData *data = GET_WINDOW_USER_PTR(window);
+  ENGINE_ASSERT(data, "Couldn't get window data from GLFW!");
+
+  KeyTypedEvent event(static_cast<int>(key_code));
+  data->callback_fn(&event);
+};
+
 static auto __mouse_button_callback = [](GLFWwindow *window, int button,
                                          int action, int mods) {
   WindowData *data = GET_WINDOW_USER_PTR(window);
@@ -161,6 +169,9 @@ void LinuxWindow::init(const WindowProperties &props) {
 
   // key callbacks
   glfwSetKeyCallback(_window, __key_callback);
+
+  // char callback (which key was pressed?)
+  glfwSetCharCallback(_window, __char_callback);
 
   // mouse callbacks
   glfwSetMouseButtonCallback(_window, __mouse_button_callback);

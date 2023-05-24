@@ -9,6 +9,9 @@ extern "C" {
 #include "window.h"
 #include "layer.h"
 #include "event/event.h"
+#include "event/mouseevent.h"
+#include "event/keyevent.h"
+#include "event/windowevent.h"
 #include "opengl/imguirenderer.h"
 
 namespace engine {
@@ -35,6 +38,18 @@ class PUB_API ImGUILayer: public Layer {
     ImGuiIO &io = ImGui::GetIO();
     io.DisplaySize = curr_display_size;
   }
+
+  bool _on_mouse_pressed_event(MousePressedEvent *e);
+  bool _on_mouse_released_event(MouseReleasedEvent *e);
+  bool _on_mouse_moved_event(MouseMovedEvent *e);
+  bool _on_mouse_scrolled_event(MouseScrolledEvent *e);
+
+  bool _on_key_pressed_event(KeyPressedEvent *e);
+  bool _on_key_released_event(KeyReleasedEvent *e);
+  bool _on_key_typed_event(KeyTypedEvent *e);
+
+  bool _on_window_resized_event(WindowResizedEvent *e);
+  bool _on_window_focused_event(WindowFocusedEvent *e);
 
  public:
   ImGUILayer(const WindowData &window_data) :

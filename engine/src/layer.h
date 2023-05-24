@@ -53,7 +53,8 @@ class PUB_API Layer {
     std::strncpy(_name, name, MAX_LAYER_NAME_LEN);
   }
 #else
-  explicit Layer(const char *name) {}
+  explicit Layer(const char *name, const WindowData &window_data) :
+    _window_data(window_data) {}
 #endif
 
   virtual ~Layer() {}

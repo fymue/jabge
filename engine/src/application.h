@@ -10,8 +10,6 @@
 #include "event/event.h"
 #include "event/windowevent.h"
 
-#define BIND_EVENT(func) std::bind(&func, this, std::placeholders::_1)
-
 namespace engine {
 
 class PUB_API Application {

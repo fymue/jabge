@@ -26,6 +26,9 @@
   #define PUB_API IMPORT
 #endif
 
+// shortcut for binding a function to and std::function argument
+#define BIND_EVENT(func) std::bind(&func, this, std::placeholders::_1)
+
 // assert statements
 
 #include <iostream>
@@ -52,5 +55,8 @@ static void __engine_basic_assert(bool check, const char *msg) {
 
   #define ENGINE_BASIC_ASSERT(check)  __engine_basic_assert(check, #check)
 #endif
+
+// OpenGL3 version for ImGui
+#define ENGINE_GLSL_VERSION "#version 460"
 
 #endif  // ENGINE_SRC_CORE_H_
