@@ -122,17 +122,28 @@ void EngineKeyMap::_fill_glfw_keymap() {
   // TODO(fymue): implement this
 }
 
+inline ImGuiKey EngineKeyMap::get_imgui_key(EngineKey key_code) {
+  return _imgui_keys[key_code];
+}
+
+inline EngineKey EngineKeyMap::get_engine_key(int key_code) {
+  return _glfw_keys[key_code];
+}
+
 // create local/private EngineKeyMap object
-// (keymap arrays get populated upom construction)
+// (keymap arrays get populated upon construction)
 static EngineKeyMap __key_map;
 
+inline EngineKey convert_to_engine_key(int key_code) {
+  return __key_map.get_engine_key(key_code);
+}
+
 inline ImGuiKey convert_to_imgui_key(EngineKey key_code) {
-  return __key_map.imgui_keys[key_code];
+  return __key_map.get_imgui_key(key_code);
 }
 
 inline ImGuiKey convert_to_imgui_key(int key_code) {
-  EngineKey engine_key_code = __key_map.glfw_keys[key_code];
-  return __key_map.imgui_keys[engine_key_code];
+  return __key_map.get_imgui_key(convert_to_engine_key(key_code));
 }
 
 }  // namespace engine
