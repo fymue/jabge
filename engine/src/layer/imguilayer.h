@@ -5,6 +5,8 @@ extern "C" {
   #include <GLFW/glfw3.h>
 }
 
+#include <imgui.h>
+
 #include "core.h"
 #include "window.h"
 #include "layer.h"
@@ -13,6 +15,7 @@ extern "C" {
 #include "event/keyevent.h"
 #include "event/windowevent.h"
 #include "opengl/imguirenderer.h"
+#include "keycode.h"
 
 namespace engine {
 
@@ -37,9 +40,6 @@ static void __update_keys_modfiers(ImGuiIO &io, GLFWwindow *window);
  * This won't cover edge cases but this is at least going to cover common cases.
  */
 static int __translate_untranslated_key(int key, int scancode);
-
-// convert key code to correct ImGuiKey variant
-static ImGuiKey __convert_key_to_imgui_key(int key_code);
 
 class PUB_API ImGUILayer: public Layer {
  private:
