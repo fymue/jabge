@@ -16,6 +16,31 @@ extern "C" {
 
 namespace engine {
 
+// update/check if any of the special keys Alt, Shift, Ctrl or Super
+// have been pressed; if so this will adjust the behaviour
+// of certain other keypresses
+static void __update_keys_modfiers(ImGuiIO &io, GLFWwindow *window);
+
+/*
+ * taken from:
+ * https://github.com/ocornut/imgui/blob/master/backends/imgui_impl_glfw.cpp
+ * (24.05.2023)
+ * GLFW 3.1+ attempts to "untranslate" keys,
+ * which goes the opposite of what every other framework does,
+ * making using lettered shortcuts difficult.
+ * (It had reasons to do so: namely GLFW is/was more likely to be used for
+ * WASD-type game controls rather than lettered shortcuts,
+ * but IHMO the 3.1 change could have been done differently)
+ * See https://github.com/glfw/glfw/issues/1502 for details.
+ * Adding a workaround to undo this (so our keys are
+ * translated->untranslated->translated, likely a lossy process).
+ * This won't cover edge cases but this is at least going to cover common cases.
+ */
+static int __translate_untranslated_key(int key, int scancode);
+
+// convert key code to correct ImGuiKey variant
+static ImGuiKey __convert_key_to_imgui_key(int key_code);
+
 class PUB_API ImGUILayer: public Layer {
  private:
   float _time;

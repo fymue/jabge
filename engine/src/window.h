@@ -1,6 +1,10 @@
 #ifndef ENGINE_SRC_WINDOW_H_
 #define ENGINE_SRC_WINDOW_H_
 
+extern "C" {
+  #include <GLFW/glfw3.h>
+}
+
 #include "core.h"
 #include "event/event.h"
 
@@ -35,6 +39,15 @@ struct PUB_API WindowData {
   int width, height;
   std::string name;
   bool vsync;
+
+  /*
+   * TODO(fymue): window ptr is currently used to e.g. be able to
+   * call the glfwGetKey function in imguilayer.cpp;
+   * direct access to window trough this ptr is not really intended
+   * for a layer though; so maybe check if this can be substituted
+   * for specific access to window resources (in this case to the key map)
+   */
+  GLFWwindow *window;  // TODO(fymue): mayb
   CallBackFunction callback_fn;
 };
 

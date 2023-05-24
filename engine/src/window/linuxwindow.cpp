@@ -49,19 +49,19 @@ static auto __key_callback = [](GLFWwindow *window, int key_code,
   switch (key_action) {
     case GLFW_PRESS :
     {
-      KeyPressedEvent event(key_code, 0);
+      KeyPressedEvent event(key_code, scan_code, 0);
       data->callback_fn(&event);
       break;
     }
     case GLFW_REPEAT :
     {
-      KeyPressedEvent event(key_code, 1);
+      KeyPressedEvent event(key_code, scan_code, 1);
       data->callback_fn(&event);
       break;
     }
     case GLFW_RELEASE :
     {
-      KeyReleasedEvent event(key_code);
+      KeyReleasedEvent event(key_code, scan_code);
       data->callback_fn(&event);
       break;
     }
@@ -151,6 +151,7 @@ void LinuxWindow::init(const WindowProperties &props) {
     is_glfw_initialized = true;
     _window = glfwCreateWindow(_data.width, _data.height,
                                _data.name.c_str(), nullptr, nullptr);
+    _data.window = _window;
     glfwMakeContextCurrent(_window);
 
     // pass custom data to window
