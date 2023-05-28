@@ -2,7 +2,7 @@
 #define ENGINE_SRC_LOG_H_
 
 #include "core.h"
-#include "cpplog/log.h"
+#include "cpplog/cpplog.h"
 #include "event/event.h"
 #include "layer.h"
 
