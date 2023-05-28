@@ -47,7 +47,7 @@ struct PUB_API WindowData {
    * for a layer though; so maybe check if this can be substituted
    * for specific access to window resources (in this case to the key map)
    */
-  GLFWwindow *window;  // TODO(fymue): mayb
+  GLFWwindow *window;
   CallBackFunction callback_fn;
 };
 

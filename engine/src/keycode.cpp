@@ -229,7 +229,6 @@ EngineKeyMap::EngineKeyMap() {
 // (keymap arrays get populated upon construction)
 static EngineKeyMap __key_map;
 
-
 inline ImGuiKey EngineKeyMap::get_imgui_key(EngineKey key_code) {
   return _imgui_keys[key_code];
 }

@@ -20,7 +20,7 @@ To install the dependencies for your type of Linux OS, you can execute the follo
 
 #### Ubuntu / Debian
 ```
-sudo apt install build-essential libboost-serialiation-dev libwayland-dev libxkbcommon-dev wayland-protocols extra-cmake-modules xorg-dev
+sudo apt install build-essential libboost-serialization-dev libwayland-dev libxkbcommon-dev wayland-protocols extra-cmake-modules xorg-dev
 
 ```
 #### Fedora

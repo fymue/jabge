@@ -143,6 +143,7 @@ $(ENGINE_SRC_DIR)/%.o : $(ENGINE_SRC_DIR)/%.cpp $(PRECOMPILED_HEADER_TARGET) bui
 
 # link engine to shared/dynamic library (engine/bin/libengine.so)
 build_engine: $(GLAD_OBJ_FILES) $(IMGUI_OBJ_FILES) $(ENGINE_OBJ_FILES)
+	mkdir -p engine/bin && \
 	$(CC) -o $(ENGINE_LIBRARY) -shared $^ \
 	$(GLFW_LINKER_FLAGS) $(LDFLAGS)
 
@@ -172,6 +173,7 @@ $(APP_SRC_DIR)/%.o : $(APP_SRC_DIR)/%.cpp
 
 # build app (app/bin/app)
 build_app: $(APP_OBJ_FILES)
+	mkdir -p app/bin && \
 	$(CC) $(CFLAGS) \
 	-o $(APP_BIN_DIR)/$(APP_TARGET) $(APP_INCLUDE_FLAGS) $^ \
 	$(APP_LINKER_FLAGS)
