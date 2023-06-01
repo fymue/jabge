@@ -4,15 +4,13 @@
 
 Linux-/Windows-compatible game engine written in C++.
 
-This engine was written as a practice project with many ideas adopted from the [Hazel engine](https://github.com/TheCherno/Hazel) (all credits go to [TheCherno](https://github.com/TheCherno)).
+This engine wais written as a practice project with many ideas adopted from the [Hazel engine](https://github.com/TheCherno/Hazel) and is currently still under development.
 
 This repository contains the [core engine](https://github.com/fymue/jabge/tree/main/engine) as well as a [sandbox app](https://github.com/fymue/jabge/tree/main/app/) that uses the engine to power a basic application. Most major components of the engine (Logger etc.) are implemented from scratch. Other parts like e.g. the Renderer depend on external libraries like `OpenGL`.
 
 ## Installation
 
 ### Prerequistes and dependencies
-
-The core engine is written in C++17 and uses [OpenGL] for all graphics-related operations as well the Boost serialization library for serialization/checkpointing. `gcc` is used for Linux compilation and `mingw32` is used for Windows compilation.
 
 ### Linux
 
