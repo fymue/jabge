@@ -439,10 +439,22 @@ void EngineKeyMap::_fill_engine_to_glfw_keymap() {
 }
 
 EngineKeyMap::EngineKeyMap() {
+  _engine_to_glfw_keys  = new int[ENGINE_KEY_MAP_MAX];
+  _engine_to_imgui_keys = new ImGuiKey[ENGINE_KEY_MAP_MAX];
+  _glfw_to_engine_keys  = new EngineKey[ENGINE_KEY_MAP_MAX];
+  _imgui_to_engine_keys = new EngineKey[ENGINE_KEY_MAP_MAX];
+
   _fill_engine_to_glfw_keymap();
   _fill_engine_to_imgui_keymap();
   _fill_glfw_to_engine_keymap();
   _fill_imgui_to_engine_keymap();
+}
+
+EngineKeyMap::~EngineKeyMap() {
+  delete _engine_to_glfw_keys;
+  delete _engine_to_imgui_keys;
+  delete _glfw_to_engine_keys;
+  delete _imgui_to_engine_keys;
 }
 
 // create local/private EngineKeyMap object

@@ -13,11 +13,14 @@ namespace engine {
 #define ENGINE_KEY_MAP_MAX 1024
 
 enum EngineKey {
+  // default key (no actual key binding)
+  KEY_NONE,
+
   // number keys
-  KEY_0, KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9,
+  KEY_0 = 48, KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9,
 
   // letter keys
-  KEY_A, KEY_B, KEY_C, KEY_D, KEY_E, KEY_F, KEY_G, KEY_H, KEY_I, KEY_J,
+  KEY_A = 65, KEY_B, KEY_C, KEY_D, KEY_E, KEY_F, KEY_G, KEY_H, KEY_I, KEY_J,
   KEY_K, KEY_L, KEY_M, KEY_N, KEY_O, KEY_P, KEY_Q, KEY_R, KEY_S, KEY_T,
   KEY_U, KEY_V, KEY_W, KEY_X, KEY_Y, KEY_Z,
 
@@ -45,25 +48,37 @@ enum EngineKey {
   KEY_LEFT_SHIFT, KEY_LEFT_CONTROL, KEY_LEFT_ALT, KEY_LEFT_SUPER,
   KEY_RIGHT_SHIFT, KEY_RIGHT_CONTROL, KEY_RIGHT_ALT, KEY_RIGHT_SUPER,
   KEY_MENU,
+};
 
-  // default key (no actual key binding)
-  KEY_NONE
+enum MouseButton {
+  MOUSE_BUTTON_1,
+  MOUSE_BUTTON_2,
+  MOUSE_BUTTON_3,
+  MOUSE_BUTTON_4,
+  MOUSE_BUTTON_5,
+  MOUSE_BUTTON_6,
+  MOUSE_BUTTON_7,
+  MOUSE_BUTTON_8,
+  MOUSE_BUTTON_LAST   = MOUSE_BUTTON_8,
+  MOUSE_BUTTON_LEFT   = MOUSE_BUTTON_1,
+  MOUSE_BUTTON_RIGHT  = MOUSE_BUTTON_2,
+  MOUSE_BUTTON_MIDDLE = MOUSE_BUTTON_3
 };
 
 // contains KeyMaps for engine and GLFW keycodes to ImGuiKey analogs
 class EngineKeyMap {
  private:
   // map engine key to ImGui key
-  ImGuiKey _engine_to_imgui_keys[ENGINE_KEY_MAP_MAX];
+  ImGuiKey *_engine_to_imgui_keys;
 
   // map engine key to GLFW key
-  int _engine_to_glfw_keys[ENGINE_KEY_MAP_MAX];
+  int *_engine_to_glfw_keys;
 
   // map GLFW key to engine key
-  EngineKey _glfw_to_engine_keys[ENGINE_KEY_MAP_MAX];
+  EngineKey *_glfw_to_engine_keys;
 
   // map ImGui key to engine key
-  EngineKey _imgui_to_engine_keys[ENGINE_KEY_MAP_MAX];
+  EngineKey *_imgui_to_engine_keys;
 
   void _fill_engine_to_imgui_keymap();
   void _fill_engine_to_glfw_keymap();
@@ -72,6 +87,7 @@ class EngineKeyMap {
 
  public:
   EngineKeyMap();
+  ~EngineKeyMap();
 
   // get ImGuiKey analog of EngineKey
   inline ImGuiKey get_imgui_key(EngineKey key_code) {
