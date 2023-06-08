@@ -2,7 +2,7 @@
 #include "linuxwindow.h"
 
 #define GET_WINDOW_USER_PTR(window) \
-reinterpret_cast<WindowData*>(glfwGetWindowUserPointer(window))
+static_cast<WindowData*>(glfwGetWindowUserPointer(window))
 
 namespace engine {
 
@@ -102,6 +102,7 @@ static auto __move_callback = [](GLFWwindow *window,
                                  double x_pos, double y_pos) {
   WindowData *data = GET_WINDOW_USER_PTR(window);
   ENGINE_ASSERT(data, "Couldn't get window data from GLFW!");
+  data->mouse_pos = Vec2(x_pos, y_pos);
 
   // dispatch (mouse) move event
   MouseMovedEvent event(x_pos, y_pos);
@@ -161,6 +162,10 @@ void LinuxWindow::init(const WindowProperties &props) {
     int glad_init_success =
       gladLoadGL(reinterpret_cast<GLADloadfunc>(glfwGetProcAddress));
     ENGINE_ASSERT(glad_init_success, "Failed to initialize GLAD!");
+
+    // input polling will detect inputs to this window
+    _window_input = new LinuxWindowInput();
+    Input::switch_input(_window_input);
   }
 
   // window callbacks
@@ -190,6 +195,7 @@ LinuxWindow::LinuxWindow(const WindowProperties &props) :
 
 LinuxWindow::~LinuxWindow() {
   glfwDestroyWindow(_window);
+  delete _window_input;
 }
 
 // process all pending events and swap the buffers (every frame)

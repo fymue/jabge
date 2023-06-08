@@ -5,7 +5,7 @@ namespace engine {
 
 #define __CNVRT(k) __convert_key_to_imgui_key(k)
 
-static void __update_keys_modfiers(ImGuiIO &io, GLFWwindow *window) {
+static void __update_key_modifiers(ImGuiIO &io, GLFWwindow *window) {
   io.AddKeyEvent(ImGuiMod_Ctrl,
                  (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL)  == GLFW_PRESS) ||
                  (glfwGetKey(window, GLFW_KEY_RIGHT_CONTROL) == GLFW_PRESS));
@@ -110,14 +110,14 @@ bool ImGUILayer::_on_key_pressed_event(KeyPressedEvent *e) {
   ImGuiIO &io = ImGui::GetIO();
 
   // check if any key modifiers have been pressed
-  __update_keys_modfiers(io, _window_data.window);
+  __update_key_modifiers(io, _window_data.window);
 
   // translate key code (maybe temporary, see function description)
   int key_code = __translate_untranslated_key(e->get_key_code(),
                                               e->get_scan_code());
 
   // convert keycode to correct ImGuiKey variant
-  ImGuiKey imgui_key = convert_to_imgui_key(key_code);
+  ImGuiKey imgui_key = convert_to_imgui_key(convert_to_engine_key(key_code));
 
   // add pressed key to ImGui
   io.AddKeyEvent(imgui_key, true);
@@ -142,14 +142,14 @@ bool ImGUILayer::_on_key_released_event(KeyReleasedEvent *e) {
   ImGuiIO &io = ImGui::GetIO();
 
   // check if any key modifiers have been pressed
-  __update_keys_modfiers(io, _window_data.window);
+  __update_key_modifiers(io, _window_data.window);
 
   // translate key code (maybe temporary, see function description)
   int key_code = __translate_untranslated_key(e->get_key_code(),
                                               e->get_scan_code());
 
   // convert keycode to correct ImGuiKey variant
-  ImGuiKey imgui_key = convert_to_imgui_key(key_code);
+  ImGuiKey imgui_key = convert_to_imgui_key(convert_to_engine_key(key_code));
 
   // add released key to ImGui
   io.AddKeyEvent(imgui_key, false);

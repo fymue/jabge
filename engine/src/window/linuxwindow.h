@@ -13,6 +13,8 @@ extern "C" {
 #include "event/keyevent.h"
 #include "event/mouseevent.h"
 
+#include "linuxwindowinput.h"
+
 namespace engine {
 
 // implementation of a window on Linux-based operating systems
@@ -40,6 +42,10 @@ class LinuxWindow: public Window {
 
   inline std::string get_name() const {
     return _data.name;
+  }
+
+  inline void *get_window_impl() const override {
+    return static_cast<void*>(_window);
   }
 
   // set the callback function of the window

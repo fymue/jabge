@@ -6,6 +6,7 @@
 #include "log.h"
 #include "layer.h"
 #include "layerstack.h"
+#include "input.h"
 
 #include "event/event.h"
 #include "event/windowevent.h"
@@ -18,6 +19,8 @@ class PUB_API Application {
   bool _is_running;
   LayerStack _layers;
 
+  static Application *_application;
+
  protected:
   inline int get_window_width() const {
     return _window->get_width();
@@ -25,10 +28,6 @@ class PUB_API Application {
 
   inline int get_window_height() const {
     return _window->get_height();
-  }
-
-  inline const WindowData &get_window_data() const {
-    return _window->get_window_data();
   }
 
  public:
@@ -55,6 +54,18 @@ class PUB_API Application {
 
   // pop an overlay layer from the layer stack
   void pop_overlay(Layer *layer);
+
+  static inline const Application &get() {
+    return *_application;
+  }
+
+  inline const Window &get_window() const {
+    return *_window;
+  }
+
+  inline const WindowData &get_window_data() const {
+    return _window->get_window_data();
+  }
 };
 
 // initialize the main application;

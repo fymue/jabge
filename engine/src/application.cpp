@@ -3,8 +3,16 @@
 
 namespace engine {
 
+Application *Application::_application = nullptr;
+Input *Input::_input = nullptr;
+
 Application::Application() :
   _window(nullptr), _is_running(false) {
+  if (!_application) {
+    // create Application singleton
+    _application = this;
+  }
+
   _window = Window::create(WindowProperties());
 
   /*

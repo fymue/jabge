@@ -53,33 +53,58 @@ enum EngineKey {
 // contains KeyMaps for engine and GLFW keycodes to ImGuiKey analogs
 class EngineKeyMap {
  private:
-  void _fill_imgui_keymap();
-  void _fill_keymap();
+  // map engine key to ImGui key
+  ImGuiKey _engine_to_imgui_keys[ENGINE_KEY_MAP_MAX];
 
-  // map engine key to imgui key
-  ImGuiKey _imgui_keys[ENGINE_KEY_MAP_MAX];
+  // map engine key to GLFW key
+  int _engine_to_glfw_keys[ENGINE_KEY_MAP_MAX];
 
   // map GLFW key to engine key
-  EngineKey _keys[ENGINE_KEY_MAP_MAX];
+  EngineKey _glfw_to_engine_keys[ENGINE_KEY_MAP_MAX];
+
+  // map ImGui key to engine key
+  EngineKey _imgui_to_engine_keys[ENGINE_KEY_MAP_MAX];
+
+  void _fill_engine_to_imgui_keymap();
+  void _fill_engine_to_glfw_keymap();
+  void _fill_imgui_to_engine_keymap();
+  void _fill_glfw_to_engine_keymap();
 
  public:
   EngineKeyMap();
 
   // get ImGuiKey analog of EngineKey
-  inline ImGuiKey get_imgui_key(EngineKey key_code);
+  inline ImGuiKey get_imgui_key(EngineKey key_code) {
+    return _engine_to_imgui_keys[key_code];
+  }
+
+  // get GLFW analog of EngineKey
+  inline int get_glfw_key(EngineKey key_code) {
+    return _engine_to_glfw_keys[key_code];
+  }
 
   // get EngineKey analog of GLFW key code
-  inline EngineKey get_engine_key(int key_code);
+  inline EngineKey get_engine_key(int key_code) {
+    return _glfw_to_engine_keys[key_code];
+  }
+
+  // get EngineKey analog of ImGuiKey
+  inline EngineKey get_engine_key(ImGuiKey key_code) {
+    return _imgui_to_engine_keys[key_code];
+  }
 };
 
 // convert GLFW key code to EngineKey analog
 EngineKey convert_to_engine_key(int key_code);
 
+// convert ImGuiKey to EngineKey analog
+EngineKey convert_to_engine_key(ImGuiKey key_code);
+
 // convert EngineKey to ImGuiKey analog
 ImGuiKey convert_to_imgui_key(EngineKey key_code);
 
-// convert GLFW key code to ImGuiKey analog
-ImGuiKey convert_to_imgui_key(int key_code);
+// convert EngineKey to GLFW analog
+int convert_to_glfw_key(EngineKey key_code);
 
 }  // namespace engine
 

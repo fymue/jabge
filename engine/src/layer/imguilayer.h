@@ -16,13 +16,14 @@ extern "C" {
 #include "event/windowevent.h"
 #include "opengl/imguirenderer.h"
 #include "keycode.h"
+#include "application.h"
 
 namespace engine {
 
 // update/check if any of the special keys Alt, Shift, Ctrl or Super
 // have been pressed; if so this will adjust the behaviour
 // of certain other keypresses
-static void __update_keys_modfiers(ImGuiIO &io, GLFWwindow *window);
+static void __update_key_modifiers(ImGuiIO &io, GLFWwindow *window);
 
 /*
  * taken from:

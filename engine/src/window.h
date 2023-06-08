@@ -7,6 +7,8 @@ extern "C" {
 
 #include "core.h"
 #include "event/event.h"
+#include "types.h"
+#include "input.h"
 
 namespace engine {
 
@@ -39,6 +41,7 @@ struct PUB_API WindowData {
   int width, height;
   std::string name;
   bool vsync;
+  Vec2<double> mouse_pos;
 
   /*
    * TODO(fymue): window ptr is currently used to e.g. be able to
@@ -55,6 +58,7 @@ struct PUB_API WindowData {
 class PUB_API Window {
  protected:
   WindowData _data;
+  Input *_window_input;
 
   Window() {}
 
@@ -66,11 +70,17 @@ class PUB_API Window {
   virtual bool is_vsync() const = 0;
   virtual void set_vsync(bool on) = 0;
 
+  virtual void *get_window_impl() const = 0;
+
   virtual void on_update() = 0;
   virtual void set_event_callback(const CallBackFunction &callback_fn) = 0;
 
   inline const WindowData &get_window_data() const {
     return _data;
+  }
+
+  inline Input *get_window_input() {
+    return _window_input;
   }
 
   static Window *create(const WindowProperties &props);
