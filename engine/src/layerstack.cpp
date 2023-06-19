@@ -3,9 +3,8 @@
 
 namespace engine {
 
-LayerStack::LayerStack() {
+LayerStack::LayerStack() : _overlay_start(0)  {
   _layer_stack.reserve(10);
-  _overlay_start = _layer_stack.begin();
 }
 
 LayerStack::~LayerStack() {
@@ -17,7 +16,8 @@ LayerStack::~LayerStack() {
 void LayerStack::push(Layer *layer) {
   // always insert new layer BEFORE _overlay_start position so
   // overlay layers always sit above the other layers of the layer stack
-  _overlay_start = _layer_stack.emplace(_overlay_start, layer);
+  _layer_stack.emplace(_layer_stack.begin() + _overlay_start, layer);
+  _overlay_start++;
 }
 
 void LayerStack::pop(Layer *layer) {

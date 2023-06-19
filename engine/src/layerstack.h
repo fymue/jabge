@@ -10,7 +10,7 @@ class PUB_API LayerStack {
   using LStack = std::vector<Layer*>;
 
   LStack _layer_stack;
-  LStack::iterator _overlay_start;
+  unsigned int _overlay_start;
 
  public:
   LayerStack();

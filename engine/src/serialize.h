@@ -20,11 +20,11 @@
 
 // base case for end of parameter pack expansion
 template<class Archive>
-static void __serialize(Archive &ar) {}
+inline void __serialize(Archive &ar) {}
 
 // expand parameter pack and serialize every passed parameter
 template<class Archive, typename T, typename ...Tr>
-static void __serialize(Archive &ar, T &first, Tr &...rest) {
+inline void __serialize(Archive &ar, T &first, Tr &...rest) {
   ar & first;
   __serialize(ar, rest...);
 }

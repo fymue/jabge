@@ -71,6 +71,9 @@ class PUB_API Layer {
   // handle event in current layer
   virtual void on_event(Event *e) {}
 
+  // draw layer-specific things using ImGui
+  virtual void on_imgui_render() {}
+
 #ifndef NDEBUG
   const char *get_name() const {
     return _name;

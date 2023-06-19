@@ -16,6 +16,8 @@ class Input {
   virtual Vec2<double> _get_mouse_pos() const = 0;
 
  public:
+  virtual ~Input() {}
+
   static inline bool is_key_pressed(EngineKey key) {
     ENGINE_ASSERT(_input, "Input is not set!");
     return _input->_is_key_pressed(key);

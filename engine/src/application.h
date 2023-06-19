@@ -11,6 +11,8 @@
 #include "event/event.h"
 #include "event/windowevent.h"
 
+#include "layer/imguilayer.h"
+
 namespace engine {
 
 class PUB_API Application {
@@ -18,6 +20,10 @@ class PUB_API Application {
   Window *_window;
   bool _is_running;
   LayerStack _layers;
+
+  // keep explicit ptr to an ImGuiLayer so each layer can do layer-specific
+  // rendering with ImGui components when they are being rendered
+  Layer *_imgui_layer;  // FIXME: why can't I declare this as an ImGuiLayer ptr?
 
   static Application *_application;
 

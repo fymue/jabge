@@ -8,7 +8,6 @@ class App: public engine::Application {
   App() {
     APP_LOG_INFO("CREATED SANDBOX APP USING ENGINE!");
     push_layer(new TestLayer("Test Layer", get_window_data()));
-    push_layer(new engine::ImGUILayer(get_window_data()));
   }
 
   ~App() {}

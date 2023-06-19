@@ -14,35 +14,13 @@ extern "C" {
 #include "event/mouseevent.h"
 #include "event/keyevent.h"
 #include "event/windowevent.h"
-#include "opengl/imguirenderer.h"
 #include "keycode.h"
 #include "application.h"
+#include "opengl/imguirenderer.h"
 
 namespace engine {
 
-// update/check if any of the special keys Alt, Shift, Ctrl or Super
-// have been pressed; if so this will adjust the behaviour
-// of certain other keypresses
-static void __update_key_modifiers(ImGuiIO &io, GLFWwindow *window);
-
-/*
- * taken from:
- * https://github.com/ocornut/imgui/blob/master/backends/imgui_impl_glfw.cpp
- * (24.05.2023)
- * GLFW 3.1+ attempts to "untranslate" keys,
- * which goes the opposite of what every other framework does,
- * making using lettered shortcuts difficult.
- * (It had reasons to do so: namely GLFW is/was more likely to be used for
- * WASD-type game controls rather than lettered shortcuts,
- * but IHMO the 3.1 change could have been done differently)
- * See https://github.com/glfw/glfw/issues/1502 for details.
- * Adding a workaround to undo this (so our keys are
- * translated->untranslated->translated, likely a lossy process).
- * This won't cover edge cases but this is at least going to cover common cases.
- */
-static int __translate_untranslated_key(int key, int scancode);
-
-class PUB_API ImGUILayer: public Layer {
+class PUB_API ImGuiLayer: public Layer {
  private:
   float _time;
 
@@ -78,18 +56,32 @@ class PUB_API ImGUILayer: public Layer {
   bool _on_window_focused_event(WindowFocusedEvent *e);
 
  public:
-  ImGUILayer(const WindowData &window_data) :
+  ImGuiLayer(const WindowData &window_data) :
     Layer("ImGUILayer", window_data), _time(0.0f) {}
 
-  ~ImGUILayer() {}
+  ~ImGuiLayer() {}
 
-  void on_push();
+  // handles stuff that needs to happen when the layer is attached
+  void on_push() override;
 
-  void on_pop();
-
-  void on_update();
+  // handles stuff that needs to happen when the layer is detached
+  void on_pop() override;
 
   void on_event(Event *e);
+
+  // set up a new layer-specific frame to render
+  void begin_render();
+
+  // render the previously created layer-specific frame
+  void end_render();
+
+  void on_imgui_render() override;
+
+  void on_update() {
+    // begin_render();
+    // on_imgui_render();
+    // end_render();
+  }
 };
 
 }  // namespace engine
